@@ -1,0 +1,84 @@
+name: New Data Source
+description: Register and onboard a new data source into the XPS Intelligence pipeline
+title: "[SOURCE] "
+labels: ["source-adapter", "integration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to register a new data source and track its onboarding into the XPS Intelligence pipeline.
+
+  - type: input
+    id: source_name
+    attributes:
+      label: Source Name
+      description: Full name of the data source (e.g., "Apollo.io Enterprise")
+      placeholder: "Apollo.io Enterprise"
+    validations:
+      required: true
+
+  - type: input
+    id: source_id
+    attributes:
+      label: Proposed Source ID
+      description: Unique identifier following the pattern SERVICE_NNN (e.g., APOLLO_002)
+      placeholder: "APOLLO_002"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: Source Type
+      options:
+        - ENRICHMENT_API
+        - FILE_UPLOAD
+        - MANUAL_EXPORT
+        - CRM_IMPORT
+        - WEBHOOK
+        - DATABASE_SYNC
+        - OTHER
+    validations:
+      required: true
+
+  - type: input
+    id: provider
+    attributes:
+      label: Provider / Vendor
+      placeholder: "Apollo.io"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What data does this source provide? Company data, contact data, enrichment?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: estimated_quality
+    attributes:
+      label: Estimated Data Quality Score (1-100)
+      options:
+        - "90-100 (Enterprise verified)"
+        - "70-89 (High quality)"
+        - "50-69 (Medium quality)"
+        - "Below 50 (Low quality / manual)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Checklist
+      options:
+        - label: Source data complies with applicable data regulations
+          required: true
+        - label: API key or access credential is available and stored securely (not in git)
+          required: true
+        - label: Source record format has been documented
+          required: true
+        - label: Source ID has been added to seed/source-registry/source_registry.csv
+          required: false

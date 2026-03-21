@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/normalized/company_record.v1.json",
+  "title": "NormalizedCompanyRecord",
+  "description": "Canonical schema for normalized company records in the XPS Intelligence pipeline. All records in normalized_companies must conform to this schema.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "id",
+    "source_id",
+    "raw_record_id",
+    "normalized_at",
+    "status",
+    "name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Internal XPS unique identifier for this company record."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Source system identifier from raw record."
+    },
+    "raw_record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Foreign key to raw_records.id."
+    },
+    "normalized_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when normalization was performed."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "ENRICHED", "SCORED", "ACTIVATED", "SUPPRESSED", "DISCARDED"],
+      "description": "Current lifecycle status of this record."
+    },
+    "discard_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for DISCARDED status, if applicable."
+    },
+    "name": {
+      "type": "string",
+      "description": "Normalized company name.",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "name_normalized": {
+      "type": ["string", "null"],
+      "description": "Lowercased, stripped company name for deduplication."
+    },
+    "domain": {
+      "type": ["string", "null"],
+      "description": "Primary web domain (e.g., acme.com). Used as deduplication key.",
+      "pattern": "^[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]?(\\.[a-z]{2,})+$"
+    },
+    "domain_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether domain has been verified as active."
+    },
+    "industry": {
+      "type": ["string", "null"],
+      "description": "Industry classification from source."
+    },
+    "industry_normalized": {
+      "type": ["string", "null"],
+      "description": "Normalized industry code from XPS ontology (xps_ontology.v1.json)."
+    },
+    "employee_count": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Number of employees."
+    },
+    "employee_count_range": {
+      "type": ["string", "null"],
+      "enum": ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10001+", null],
+      "description": "Employee count range bucket."
+    },
+    "revenue_usd": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Annual revenue in USD."
+    },
+    "revenue_range": {
+      "type": ["string", "null"],
+      "description": "Revenue range bucket (e.g., '$1M-$10M')."
+    },
+    "founded_year": {
+      "type": ["integer", "null"],
+      "minimum": 1800,
+      "description": "Year company was founded."
+    },
+    "city": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "state": {
+      "type": ["string", "null"],
+      "maxLength": 100
+    },
+    "country": {
+      "type": ["string", "null"],
+      "maxLength": 100
+    },
+    "country_code": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 country code."
+    },
+    "linkedin_url": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "maxLength": 50
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Company description from source."
+    },
+    "description_enriched": {
+      "type": ["string", "null"],
+      "description": "AI-enriched company description."
+    },
+    "tech_stack": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Detected technology stack."
+    },
+    "score": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "XPS lead score (0-100). Records with score >= 70 are eligible for activation."
+    },
+    "score_signals": {
+      "type": ["object", "null"],
+      "description": "Individual signal values used to compute the score.",
+      "properties": {
+        "industry_match": { "type": "number", "minimum": 0, "maximum": 25 },
+        "company_size_fit": { "type": "number", "minimum": 0, "maximum": 20 },
+        "tech_stack_alignment": { "type": "number", "minimum": 0, "maximum": 20 },
+        "contact_role_match": { "type": "number", "minimum": 0, "maximum": 20 },
+        "source_quality": { "type": "number", "minimum": 0, "maximum": 15 }
+      }
+    },
+    "scored_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "enrichment_status": {
+      "type": ["string", "null"],
+      "enum": ["PENDING", "COMPLETE", "FAILED", "SKIPPED", null]
+    },
+    "enriched_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "enrichment_model": {
+      "type": ["string", "null"],
+      "description": "Model used for enrichment (e.g., gpt-4o)."
+    },
+    "hubspot_id": {
+      "type": ["string", "null"],
+      "description": "HubSpot company ID if synced to CRM."
+    },
+    "hubspot_synced_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "suppression_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for suppression if status is SUPPRESSED."
+    }
+  }
+}

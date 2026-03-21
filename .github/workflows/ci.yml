@@ -1,0 +1,210 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-json:
+    name: Validate JSON Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: |
+          echo "Validating JSON files..."
+          failed=0
+          while IFS= read -r -d '' file; do
+            if ! python3 -m json.tool "$file" > /dev/null 2>&1; then
+              echo "FAIL: Invalid JSON in $file"
+              python3 -m json.tool "$file" || true
+              failed=1
+            else
+              echo "OK: $file"
+            fi
+          done < <(find . -name "*.json" -not -path "./.git/*" -not -path "./node_modules/*" -print0)
+          if [ "$failed" -eq 1 ]; then
+            echo "JSON validation failed"
+            exit 1
+          fi
+          echo "All JSON files valid"
+
+  validate-yaml:
+    name: Validate YAML Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Validate YAML syntax
+        run: |
+          echo "Validating YAML files..."
+          failed=0
+          while IFS= read -r -d '' file; do
+            if ! yamllint -d "{extends: relaxed, rules: {line-length: {max: 200}}}" "$file" 2>&1; then
+              echo "FAIL: YAML lint error in $file"
+              failed=1
+            else
+              echo "OK: $file"
+            fi
+          done < <(find . \( -name "*.yml" -o -name "*.yaml" \) -not -path "./.git/*" -not -path "./node_modules/*" -print0)
+          if [ "$failed" -eq 1 ]; then
+            echo "YAML validation failed"
+            exit 1
+          fi
+          echo "All YAML files valid"
+
+  validate-folder-structure:
+    name: Validate Folder Structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required directories exist
+        run: |
+          echo "Checking required directories..."
+          failed=0
+          dirs=(
+            "docs/01-architecture"
+            "docs/02-roadmap"
+            "docs/03-checklists"
+            "docs/04-runbooks"
+            "docs/05-security"
+            "docs/06-integrations"
+            "docs/07-prompts"
+            "schemas/raw"
+            "schemas/normalized"
+            "schemas/activation"
+            "schemas/crm"
+            "schemas/ontology"
+            "seed/source-registry"
+            "seed/categories"
+            "templates/repo-template"
+            "templates/service-template"
+            "templates/workflow-template"
+            "integrations/github"
+            "integrations/railway"
+            "integrations/supabase"
+            "integrations/hubspot"
+            "integrations/google"
+            "integrations/openai"
+            "site"
+          )
+          for dir in "${dirs[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "FAIL: Required directory missing: $dir"
+              failed=1
+            else
+              echo "OK: $dir"
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            exit 1
+          fi
+          echo "All required directories present"
+
+  validate-required-files:
+    name: Validate Required Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          echo "Checking required files..."
+          failed=0
+          files=(
+            "README.md"
+            "docs/01-architecture/XPS_MASTER_BLUEPRINT.md"
+            "docs/01-architecture/SYSTEM_CONTRACT.md"
+            "docs/01-architecture/REPOSITORY_MAP.md"
+            "docs/02-roadmap/MONDAY_MVP_ROADMAP.md"
+            "docs/03-checklists/LAUNCH_CHECKLIST.md"
+            "docs/05-security/UNIFIED_CREDENTIAL_AND_ENVIRONMENT_STRATEGY.md"
+            "docs/06-integrations/INTEGRATION_MATRIX.md"
+            "docs/07-prompts/MASTER_INVOCATION_PROMPT.md"
+            "docs/07-prompts/COPILOT_BUILD_PROTOCOL.md"
+            "schemas/raw/raw_source_record.v1.json"
+            "schemas/normalized/company_record.v1.json"
+            "schemas/normalized/contact_record.v1.json"
+            "schemas/activation/lead_activation_record.v1.json"
+            "schemas/crm/hubspot_mapping.v1.json"
+            "schemas/ontology/xps_ontology.v1.json"
+            "seed/source-registry/source_registry.csv"
+            "seed/categories/industry_taxonomy.csv"
+            "integrations/github/GITHUB_PROJECT_AND_AUTOMATION_SPEC.md"
+            "integrations/railway/ENVIRONMENT_CONTRACT.md"
+            "integrations/supabase/SUPABASE_DATA_AND_VECTOR_SPEC.md"
+            "integrations/hubspot/HUBSPOT_OBJECT_MODEL.md"
+            "integrations/google/GOOGLE_WORKSPACE_BRIDGE_SPEC.md"
+            "integrations/openai/OPENAI_GPT_ACTIONS_SCHEMA.md"
+            ".github/copilot-instructions.md"
+            ".github/PULL_REQUEST_TEMPLATE.md"
+            "site/index.html"
+          )
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "FAIL: Required file missing: $file"
+              failed=1
+            else
+              echo "OK: $file"
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            exit 1
+          fi
+          echo "All required files present"
+
+  validate-markdown-links:
+    name: Validate Markdown Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check
+
+      - name: Check markdown links
+        run: |
+          echo "Checking markdown links (local links only)..."
+          failed=0
+          config='{"ignorePatterns": [{"pattern": "^https?://"}]}'
+          echo "$config" > /tmp/mlc-config.json
+          while IFS= read -r -d '' file; do
+            if ! markdown-link-check --config /tmp/mlc-config.json "$file" 2>&1; then
+              echo "WARN: Link issues in $file"
+            fi
+          done < <(find . -name "*.md" -not -path "./.git/*" -not -path "./node_modules/*" -print0)
+          echo "Markdown link check complete"
+
+  validate-csv:
+    name: Validate CSV Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate CSV files are non-empty and have headers
+        run: |
+          echo "Validating CSV files..."
+          failed=0
+          while IFS= read -r -d '' file; do
+            lines=$(wc -l < "$file")
+            if [ "$lines" -lt 2 ]; then
+              echo "FAIL: CSV file has no data rows: $file"
+              failed=1
+            else
+              echo "OK: $file ($lines lines)"
+            fi
+          done < <(find . -name "*.csv" -not -path "./.git/*" -print0)
+          if [ "$failed" -eq 1 ]; then
+            exit 1
+          fi
+          echo "All CSV files valid"

@@ -1,0 +1,77 @@
+name: Integration Request
+description: Request a new platform integration or modification to an existing integration
+title: "[INTEGRATION] "
+labels: ["integration", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for new platform integrations or significant changes to existing integrations.
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform / Service
+      placeholder: "e.g., Salesforce, Clearbit, Stripe"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: integration_type
+    attributes:
+      label: Integration Type
+      options:
+        - New integration
+        - Modification to existing integration
+        - Deprecation of existing integration
+    validations:
+      required: true
+
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Data Direction
+      options:
+        - Read only (inbound to XPS)
+        - Write only (outbound from XPS)
+        - Bidirectional
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: What business need does this integration serve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: data_contract
+    attributes:
+      label: Data Contract
+      description: What data is exchanged? What schema does it conform to?
+    validations:
+      required: true
+
+  - type: textarea
+    id: auth_method
+    attributes:
+      label: Authentication Method
+      description: How will authentication be handled? Where will credentials be stored?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-Request Checklist
+      options:
+        - label: Integration matrix in docs/06-integrations/INTEGRATION_MATRIX.md will be updated
+          required: true
+        - label: A spec file will be created in integrations/<platform>/
+          required: true
+        - label: Credentials will be stored per the credential strategy
+          required: true
+        - label: No mock data or stub endpoints will be used in production
+          required: true

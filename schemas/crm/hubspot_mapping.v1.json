@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/crm/hubspot_mapping.v1.json",
+  "title": "HubSpotMapping",
+  "description": "Mapping of XPS Intelligence normalized record fields to HubSpot API v3 property names. This is the authoritative field mapping contract.",
+  "version": "1.0.0",
+  "hubspot_api_version": "v3",
+  "company_mapping": {
+    "description": "Maps normalized_companies fields to HubSpot Company properties.",
+    "fields": [
+      { "xps_field": "name", "hubspot_property": "name", "type": "string", "required": true },
+      { "xps_field": "domain", "hubspot_property": "domain", "type": "string", "required": false },
+      { "xps_field": "industry_normalized", "hubspot_property": "industry", "type": "string", "required": false },
+      { "xps_field": "employee_count", "hubspot_property": "numberofemployees", "type": "number", "required": false },
+      { "xps_field": "revenue_usd", "hubspot_property": "annualrevenue", "type": "number", "required": false },
+      { "xps_field": "city", "hubspot_property": "city", "type": "string", "required": false },
+      { "xps_field": "state", "hubspot_property": "state", "type": "string", "required": false },
+      { "xps_field": "country", "hubspot_property": "country", "type": "string", "required": false },
+      { "xps_field": "phone", "hubspot_property": "phone", "type": "string", "required": false },
+      { "xps_field": "linkedin_url", "hubspot_property": "linkedin_company_page", "type": "string", "required": false },
+      { "xps_field": "description_enriched", "hubspot_property": "description", "type": "string", "required": false },
+      { "xps_field": "score", "hubspot_property": "xps_lead_score", "type": "number", "required": false, "note": "Custom HubSpot property — must be created in HubSpot before first sync." },
+      { "xps_field": "source_id", "hubspot_property": "xps_source_id", "type": "string", "required": false, "note": "Custom HubSpot property." },
+      { "xps_field": "id", "hubspot_property": "xps_record_id", "type": "string", "required": false, "note": "Custom HubSpot property." }
+    ]
+  },
+  "contact_mapping": {
+    "description": "Maps normalized_contacts fields to HubSpot Contact properties.",
+    "fields": [
+      { "xps_field": "first_name", "hubspot_property": "firstname", "type": "string", "required": true },
+      { "xps_field": "last_name", "hubspot_property": "lastname", "type": "string", "required": true },
+      { "xps_field": "email", "hubspot_property": "email", "type": "string", "required": true },
+      { "xps_field": "phone", "hubspot_property": "phone", "type": "string", "required": false },
+      { "xps_field": "title", "hubspot_property": "jobtitle", "type": "string", "required": false },
+      { "xps_field": "city", "hubspot_property": "city", "type": "string", "required": false },
+      { "xps_field": "state", "hubspot_property": "state", "type": "string", "required": false },
+      { "xps_field": "country", "hubspot_property": "country", "type": "string", "required": false },
+      { "xps_field": "linkedin_url", "hubspot_property": "linkedin_profile_url", "type": "string", "required": false },
+      { "xps_field": "score", "hubspot_property": "xps_lead_score", "type": "number", "required": false, "note": "Custom HubSpot property." },
+      { "xps_field": "source_id", "hubspot_property": "xps_source_id", "type": "string", "required": false, "note": "Custom HubSpot property." },
+      { "xps_field": "id", "hubspot_property": "xps_record_id", "type": "string", "required": false, "note": "Custom HubSpot property." }
+    ]
+  },
+  "custom_properties_required": [
+    {
+      "object_type": "company",
+      "property_name": "xps_lead_score",
+      "label": "XPS Lead Score",
+      "type": "number",
+      "field_type": "number",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_source_id",
+      "label": "XPS Source ID",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_record_id",
+      "label": "XPS Record ID",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "contact",
+      "property_name": "xps_lead_score",
+      "label": "XPS Lead Score",
+      "type": "number",
+      "field_type": "number",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "contact",
+      "property_name": "xps_source_id",
+      "label": "XPS Source ID",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "contact",
+      "property_name": "xps_record_id",
+      "label": "XPS Record ID",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    }
+  ],
+  "association_rules": [
+    {
+      "description": "Associate contact to company when both are synced in the same activation batch.",
+      "from_object": "contact",
+      "to_object": "company",
+      "association_type": "contact_to_company"
+    }
+  ]
+}

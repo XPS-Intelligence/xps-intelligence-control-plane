@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/normalized/contact_record.v1.json",
+  "title": "NormalizedContactRecord",
+  "description": "Canonical schema for normalized contact records in the XPS Intelligence pipeline. All records in normalized_contacts must conform to this schema.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "id",
+    "source_id",
+    "raw_record_id",
+    "normalized_at",
+    "status",
+    "first_name",
+    "last_name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Internal XPS unique identifier for this contact record."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Source system identifier from raw record."
+    },
+    "raw_record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Foreign key to raw_records.id."
+    },
+    "company_record_id": {
+      "type": ["string", "null"],
+      "format": "uuid",
+      "description": "Foreign key to normalized_companies.id if linked."
+    },
+    "normalized_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "ENRICHED", "SCORED", "ACTIVATED", "SUPPRESSED", "DISCARDED"]
+    },
+    "discard_reason": {
+      "type": ["string", "null"]
+    },
+    "first_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "last_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "full_name": {
+      "type": ["string", "null"],
+      "maxLength": 400
+    },
+    "email": {
+      "type": ["string", "null"],
+      "format": "email",
+      "description": "Primary email address. Required for activation."
+    },
+    "email_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "email_bounced": {
+      "type": "boolean",
+      "default": false
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "maxLength": 50
+    },
+    "title": {
+      "type": ["string", "null"],
+      "description": "Job title as provided by source."
+    },
+    "title_normalized": {
+      "type": ["string", "null"],
+      "description": "Normalized job title mapped to XPS ontology title taxonomy."
+    },
+    "seniority_level": {
+      "type": ["string", "null"],
+      "enum": ["C_LEVEL", "VP", "DIRECTOR", "MANAGER", "INDIVIDUAL_CONTRIBUTOR", "UNKNOWN", null]
+    },
+    "department": {
+      "type": ["string", "null"],
+      "enum": ["ENGINEERING", "SALES", "MARKETING", "OPERATIONS", "FINANCE", "HR", "PRODUCT", "LEGAL", "EXECUTIVE", "OTHER", null]
+    },
+    "linkedin_url": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "city": {
+      "type": ["string", "null"],
+      "maxLength": 200
+    },
+    "state": {
+      "type": ["string", "null"],
+      "maxLength": 100
+    },
+    "country": {
+      "type": ["string", "null"],
+      "maxLength": 100
+    },
+    "country_code": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z]{2}$"
+    },
+    "score": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "score_signals": {
+      "type": ["object", "null"],
+      "properties": {
+        "industry_match": { "type": "number", "minimum": 0, "maximum": 25 },
+        "company_size_fit": { "type": "number", "minimum": 0, "maximum": 20 },
+        "tech_stack_alignment": { "type": "number", "minimum": 0, "maximum": 20 },
+        "contact_role_match": { "type": "number", "minimum": 0, "maximum": 20 },
+        "source_quality": { "type": "number", "minimum": 0, "maximum": 15 }
+      }
+    },
+    "scored_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "enrichment_status": {
+      "type": ["string", "null"],
+      "enum": ["PENDING", "COMPLETE", "FAILED", "SKIPPED", null]
+    },
+    "enriched_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "hubspot_id": {
+      "type": ["string", "null"],
+      "description": "HubSpot contact ID if synced to CRM."
+    },
+    "hubspot_synced_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "suppression_reason": {
+      "type": ["string", "null"]
+    }
+  }
+}

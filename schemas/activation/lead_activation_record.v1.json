@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/activation/lead_activation_record.v1.json",
+  "title": "LeadActivationRecord",
+  "description": "Schema for lead activation records. An activation record is created when a scored record meets all activation gate criteria and is queued for HubSpot sync.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "id",
+    "company_record_id",
+    "activation_triggered_at",
+    "activation_score",
+    "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this activation record."
+    },
+    "company_record_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Foreign key to normalized_companies.id."
+    },
+    "contact_record_id": {
+      "type": ["string", "null"],
+      "format": "uuid",
+      "description": "Foreign key to normalized_contacts.id, if a specific contact triggered activation."
+    },
+    "activation_triggered_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this activation was triggered."
+    },
+    "activation_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Score at time of activation. Must be >= 70 per activation gate criteria."
+    },
+    "activation_score_signals": {
+      "type": ["object", "null"],
+      "description": "Score signal snapshot at time of activation.",
+      "properties": {
+        "industry_match": { "type": "number" },
+        "company_size_fit": { "type": "number" },
+        "tech_stack_alignment": { "type": "number" },
+        "contact_role_match": { "type": "number" },
+        "source_quality": { "type": "number" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "SYNCING", "SYNCED", "FAILED", "SUPPRESSED"],
+      "description": "Current status of this activation record."
+    },
+    "hubspot_company_id": {
+      "type": ["string", "null"],
+      "description": "HubSpot company ID assigned after successful sync."
+    },
+    "hubspot_contact_id": {
+      "type": ["string", "null"],
+      "description": "HubSpot contact ID assigned after successful sync."
+    },
+    "hubspot_deal_id": {
+      "type": ["string", "null"],
+      "description": "HubSpot deal ID if a deal was created."
+    },
+    "sync_started_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "sync_completed_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "failure_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for FAILED status."
+    },
+    "failure_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Number of sync attempts that have failed."
+    },
+    "suppression_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for SUPPRESSED status."
+    },
+    "suppressed_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "sync_log_id": {
+      "type": ["string", "null"],
+      "format": "uuid",
+      "description": "Foreign key to hubspot_sync_log.id for the most recent sync attempt."
+    }
+  }
+}

@@ -1,0 +1,128 @@
+name: Template Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "templates/**"
+      - "schemas/**"
+      - "integrations/**"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-template-artifacts:
+    name: Validate Control Plane Template Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate all required control-plane artifacts exist
+        run: |
+          echo "=== Control Plane Template Validation ==="
+          echo "Verifying this repo is complete enough to govern and generate downstream repos."
+          failed=0
+
+          artifacts=(
+            "README.md"
+            "docs/01-architecture/XPS_MASTER_BLUEPRINT.md"
+            "docs/01-architecture/SYSTEM_CONTRACT.md"
+            "docs/01-architecture/REPOSITORY_MAP.md"
+            "docs/02-roadmap/MONDAY_MVP_ROADMAP.md"
+            "docs/03-checklists/LAUNCH_CHECKLIST.md"
+            "docs/05-security/UNIFIED_CREDENTIAL_AND_ENVIRONMENT_STRATEGY.md"
+            "docs/06-integrations/INTEGRATION_MATRIX.md"
+            "docs/07-prompts/MASTER_INVOCATION_PROMPT.md"
+            "docs/07-prompts/COPILOT_BUILD_PROTOCOL.md"
+            "schemas/raw/raw_source_record.v1.json"
+            "schemas/normalized/company_record.v1.json"
+            "schemas/normalized/contact_record.v1.json"
+            "schemas/activation/lead_activation_record.v1.json"
+            "schemas/crm/hubspot_mapping.v1.json"
+            "schemas/ontology/xps_ontology.v1.json"
+            "seed/source-registry/source_registry.csv"
+            "seed/categories/industry_taxonomy.csv"
+            "integrations/github/GITHUB_PROJECT_AND_AUTOMATION_SPEC.md"
+            "integrations/github/XPS_ORCHESTRATOR_INTEGRATION_SPEC.md"
+            "integrations/railway/ENVIRONMENT_CONTRACT.md"
+            "integrations/supabase/SUPABASE_DATA_AND_VECTOR_SPEC.md"
+            "integrations/hubspot/HUBSPOT_OBJECT_MODEL.md"
+            "integrations/google/GOOGLE_WORKSPACE_BRIDGE_SPEC.md"
+            "integrations/openai/OPENAI_GPT_ACTIONS_SCHEMA.md"
+            "templates/repo-template/REPO_TEMPLATE_MANIFEST.md"
+            "templates/service-template/SERVICE_TEMPLATE_MANIFEST.md"
+            "templates/workflow-template/WORKFLOW_TEMPLATE_MANIFEST.md"
+            ".github/copilot-instructions.md"
+            ".github/PULL_REQUEST_TEMPLATE.md"
+            ".github/ISSUE_TEMPLATE/new-source.yml"
+            ".github/ISSUE_TEMPLATE/bug.yml"
+            ".github/ISSUE_TEMPLATE/architecture-change.yml"
+            ".github/ISSUE_TEMPLATE/integration-request.yml"
+            "site/index.html"
+          )
+
+          for artifact in "${artifacts[@]}"; do
+            if [ ! -f "$artifact" ]; then
+              echo "FAIL: Missing required artifact: $artifact"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -eq 1 ]; then
+            echo ""
+            echo "TEMPLATE VALIDATION FAILED: This repo is missing required artifacts."
+            echo "The control plane must be complete before governing downstream repos."
+            exit 1
+          fi
+
+          echo ""
+          echo "TEMPLATE VALIDATION PASSED: All required control-plane artifacts present."
+          echo "This repo is ready to govern and generate downstream repos."
+
+      - name: Validate JSON schemas are well-formed
+        run: |
+          echo "=== Schema Validation ==="
+          failed=0
+          for schema in schemas/**/*.json; do
+            if ! python3 -m json.tool "$schema" > /dev/null 2>&1; then
+              echo "FAIL: Invalid JSON schema: $schema"
+              failed=1
+            else
+              echo "OK: $schema"
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            exit 1
+          fi
+
+      - name: Validate no hardcoded secrets
+        run: |
+          echo "=== Secret Leak Detection ==="
+          patterns=(
+            "sk-[a-zA-Z0-9]{48}"
+            "eyJhbGciOiJ"
+            "service_role_key"
+            "PRIVATE KEY"
+            "api_key.*=.*['\"][a-zA-Z0-9_-]{20,}"
+          )
+          failed=0
+          for pattern in "${patterns[@]}"; do
+            matches=$(grep -r -E "$pattern" --include="*.json" --include="*.yml" \
+              --include="*.yaml" --include="*.ts" --include="*.py" --include="*.js" \
+              . 2>/dev/null | grep -v ".git" | grep -v "node_modules" | grep -v "EXAMPLE" || true)
+            if [ -n "$matches" ]; then
+              echo "WARN: Potential secret pattern detected: $pattern"
+              echo "$matches"
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            echo ""
+            echo "Potential hardcoded secrets detected. Review the above matches."
+            echo "If these are false positives, add an EXAMPLE comment."
+            exit 1
+          fi
+          echo "No hardcoded secret patterns detected"

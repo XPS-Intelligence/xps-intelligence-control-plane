@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/ontology/xps_ontology.v1.json",
+  "title": "XPSOntology",
+  "description": "XPS domain ontology defining industry classifications, title taxonomy, company size buckets, and technology categories used for scoring and normalization.",
+  "version": "1.0.0",
+  "industries": {
+    "description": "Normalized industry codes used in company_record.industry_normalized.",
+    "values": [
+      { "code": "SOFTWARE_B2B", "label": "B2B Software / SaaS", "target_fit": "HIGH" },
+      { "code": "SOFTWARE_B2C", "label": "B2C Software / Consumer Tech", "target_fit": "MEDIUM" },
+      { "code": "FINTECH", "label": "Financial Technology", "target_fit": "HIGH" },
+      { "code": "HEALTHTECH", "label": "Health Technology", "target_fit": "HIGH" },
+      { "code": "EDTECH", "label": "Education Technology", "target_fit": "MEDIUM" },
+      { "code": "PROPTECH", "label": "Property Technology", "target_fit": "MEDIUM" },
+      { "code": "LEGALTECH", "label": "Legal Technology", "target_fit": "HIGH" },
+      { "code": "MARTECH", "label": "Marketing Technology", "target_fit": "HIGH" },
+      { "code": "LOGISTICS", "label": "Logistics and Supply Chain", "target_fit": "MEDIUM" },
+      { "code": "MANUFACTURING", "label": "Manufacturing", "target_fit": "LOW" },
+      { "code": "PROFESSIONAL_SERVICES", "label": "Professional Services", "target_fit": "MEDIUM" },
+      { "code": "AGENCY", "label": "Marketing / Creative Agency", "target_fit": "HIGH" },
+      { "code": "CONSULTING", "label": "Business Consulting", "target_fit": "HIGH" },
+      { "code": "ECOMMERCE", "label": "E-Commerce / Retail", "target_fit": "MEDIUM" },
+      { "code": "MEDIA", "label": "Media and Publishing", "target_fit": "LOW" },
+      { "code": "TELECOM", "label": "Telecommunications", "target_fit": "LOW" },
+      { "code": "ENERGY", "label": "Energy and Utilities", "target_fit": "LOW" },
+      { "code": "GOVERNMENT", "label": "Government and Public Sector", "target_fit": "LOW" },
+      { "code": "NONPROFIT", "label": "Non-Profit", "target_fit": "LOW" },
+      { "code": "UNKNOWN", "label": "Unknown / Unclassified", "target_fit": "UNKNOWN" }
+    ]
+  },
+  "seniority_levels": {
+    "description": "Contact seniority level taxonomy used in contact_record.seniority_level.",
+    "values": [
+      { "code": "C_LEVEL", "label": "C-Level Executive", "target_fit": "HIGH", "title_keywords": ["CEO", "CTO", "CFO", "COO", "CMO", "CISO", "CRO", "CPO"] },
+      { "code": "VP", "label": "Vice President", "target_fit": "HIGH", "title_keywords": ["VP", "Vice President", "SVP", "EVP"] },
+      { "code": "DIRECTOR", "label": "Director", "target_fit": "HIGH", "title_keywords": ["Director", "Head of", "Global Head"] },
+      { "code": "MANAGER", "label": "Manager", "target_fit": "MEDIUM", "title_keywords": ["Manager", "Lead", "Supervisor"] },
+      { "code": "INDIVIDUAL_CONTRIBUTOR", "label": "Individual Contributor", "target_fit": "LOW", "title_keywords": ["Engineer", "Analyst", "Associate", "Specialist", "Coordinator"] },
+      { "code": "UNKNOWN", "label": "Unknown", "target_fit": "UNKNOWN", "title_keywords": [] }
+    ]
+  },
+  "company_size_buckets": {
+    "description": "Company size scoring buckets.",
+    "values": [
+      { "range": "1-10", "label": "Micro", "target_fit": "LOW", "score_contribution": 5 },
+      { "range": "11-50", "label": "Small", "target_fit": "MEDIUM", "score_contribution": 10 },
+      { "range": "51-200", "label": "Small-Medium", "target_fit": "HIGH", "score_contribution": 20 },
+      { "range": "201-500", "label": "Medium", "target_fit": "HIGH", "score_contribution": 20 },
+      { "range": "501-1000", "label": "Medium-Large", "target_fit": "MEDIUM", "score_contribution": 15 },
+      { "range": "1001-5000", "label": "Large", "target_fit": "MEDIUM", "score_contribution": 10 },
+      { "range": "5001-10000", "label": "Enterprise", "target_fit": "LOW", "score_contribution": 5 },
+      { "range": "10001+", "label": "Global Enterprise", "target_fit": "LOW", "score_contribution": 5 }
+    ]
+  },
+  "tech_categories": {
+    "description": "Technology categories used for tech stack alignment scoring.",
+    "high_value": [
+      "Salesforce", "HubSpot", "Marketo", "Pardot", "Outreach", "SalesLoft",
+      "Segment", "Amplitude", "Mixpanel", "Snowflake", "dbt", "Fivetran",
+      "Stripe", "Braintree", "Chargebee", "Zuora"
+    ],
+    "medium_value": [
+      "Intercom", "Zendesk", "Freshdesk", "Monday.com", "Asana", "Jira",
+      "Slack", "Notion", "Airtable", "Webflow", "Shopify"
+    ],
+    "low_value": [
+      "WordPress", "Squarespace", "Wix", "GoDaddy"
+    ]
+  },
+  "score_weights": {
+    "description": "Scoring signal weights. Must sum to 100.",
+    "industry_match": 25,
+    "company_size_fit": 20,
+    "tech_stack_alignment": 20,
+    "contact_role_match": 20,
+    "source_quality": 15,
+    "total": 100
+  },
+  "activation_threshold": 70
+}
