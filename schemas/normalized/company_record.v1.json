@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.com/schemas/normalized/company_record.v1.json",
+  "title": "Normalized Company Record v1",
+  "description": "Canonical company record produced by the normalization pipeline from one or more raw source records.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "company_id",
+    "name",
+    "domain",
+    "source_ids",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "normalized/v1",
+      "description": "Schema version identifier. Must be 'normalized/v1'."
+    },
+    "company_id": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/uuid",
+      "description": "Stable internal company identifier. Persists across updates and re-enrichment."
+    },
+    "name": {
+      "type": "string",
+      "description": "Legal or trading name of the company.",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "domain": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/domain",
+      "description": "Primary web domain without protocol or www prefix."
+    },
+    "industry": {
+      "type": "string",
+      "description": "Primary industry classification. Value from seed/categories/industry_taxonomy.csv.",
+      "maxLength": 100
+    },
+    "industry_sub": {
+      "type": "string",
+      "description": "Sub-industry or vertical classification.",
+      "maxLength": 100
+    },
+    "company_type": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/company_type"
+    },
+    "lifecycle_stage": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/lifecycle_stage"
+    },
+    "employee_range": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/employee_range"
+    },
+    "revenue_range": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/revenue_range"
+    },
+    "hq_country": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/country_code",
+      "description": "ISO 3166-1 alpha-2 country code of headquarters."
+    },
+    "hq_city": {
+      "type": "string",
+      "description": "City of headquarters.",
+      "maxLength": 100
+    },
+    "hq_state": {
+      "type": "string",
+      "description": "State or province of headquarters.",
+      "maxLength": 100
+    },
+    "description": {
+      "type": "string",
+      "description": "Short company description (max 500 chars).",
+      "maxLength": 500
+    },
+    "linkedin_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "LinkedIn company page URL.",
+      "pattern": "^https://(www\\.)?linkedin\\.com/company/"
+    },
+    "twitter_handle": {
+      "type": "string",
+      "description": "Twitter/X handle without the @ symbol.",
+      "pattern": "^[A-Za-z0-9_]{1,15}$"
+    },
+    "founded_year": {
+      "type": "integer",
+      "description": "Year the company was founded.",
+      "minimum": 1800,
+      "maximum": 2100
+    },
+    "technologies": {
+      "type": "array",
+      "description": "Detected technology stack (e.g., Salesforce, AWS, React).",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      },
+      "uniqueItems": true,
+      "maxItems": 50
+    },
+    "funding_total_usd": {
+      "type": "number",
+      "description": "Total funding raised in USD.",
+      "minimum": 0
+    },
+    "last_funding_round": {
+      "type": "string",
+      "description": "Most recent funding round type.",
+      "enum": ["pre-seed", "seed", "series-a", "series-b", "series-c", "series-d+", "debt", "ipo", "acquired", "unknown"]
+    },
+    "source_ids": {
+      "type": "array",
+      "description": "All source IDs that contributed data to this company record.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "created_at": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/iso8601_datetime",
+      "description": "UTC timestamp when this company was first seen."
+    },
+    "updated_at": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/iso8601_datetime",
+      "description": "UTC timestamp of last update or enrichment."
+    },
+    "enrichment_score": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score",
+      "description": "Data completeness score from 0 (empty) to 100 (fully enriched)."
+    },
+    "is_suppressed": {
+      "type": "boolean",
+      "description": "If true, this company is excluded from activation (opted out, competitor, etc.).",
+      "default": false
+    }
+  },
+  "examples": [
+    {
+      "schema_version": "normalized/v1",
+      "company_id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "Acme Corp",
+      "domain": "acmecorp.com",
+      "industry": "Software",
+      "company_type": "private",
+      "lifecycle_stage": "series-a",
+      "employee_range": "51-200",
+      "hq_country": "US",
+      "hq_city": "San Francisco",
+      "hq_state": "California",
+      "description": "B2B SaaS platform for team collaboration.",
+      "linkedin_url": "https://www.linkedin.com/company/acme-corp",
+      "founded_year": 2020,
+      "technologies": ["React", "AWS", "Stripe"],
+      "source_ids": ["techcrunch_startups", "linkedin_company_feed"],
+      "created_at": "2025-01-10T00:00:00Z",
+      "updated_at": "2025-01-15T09:30:00Z",
+      "enrichment_score": 85,
+      "is_suppressed": false
+    }
+  ]
+}

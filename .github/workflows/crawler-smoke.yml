@@ -1,0 +1,164 @@
+name: Crawler Smoke Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "seed/source-registry/**"
+      - ".github/workflows/crawler-smoke.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "seed/source-registry/**"
+      - ".github/workflows/crawler-smoke.yml"
+  schedule:
+    # Run at 06:00 UTC every day to detect source availability issues early
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      source_id:
+        description: Specific source_id to test (leave blank to test all active sources)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test-sources:
+    name: Smoke Test Active Sources
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests 2>/dev/null || true
+
+      - name: Parse active sources from registry
+        id: parse_sources
+        run: |
+          python3 << 'EOF'
+          import csv
+          import json
+          import os
+
+          target = os.environ.get("INPUT_SOURCE_ID", "").strip()
+          sources = []
+
+          with open("seed/source-registry/source_registry.csv", newline="") as f:
+              reader = csv.DictReader(f)
+              for row in reader:
+                  if row.get("active", "").lower() == "true":
+                      if target and row["source_id"] != target:
+                          continue
+                      sources.append({
+                          "source_id": row["source_id"],
+                          "name": row["name"],
+                          "base_url": row["base_url"],
+                          "crawler_type": row["crawler_type"],
+                      })
+
+          print(f"Active sources to test: {len(sources)}")
+          for s in sources:
+              print(f"  - {s['source_id']} ({s['crawler_type']}): {s['base_url']}")
+
+          # Write to GitHub output
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"source_count={len(sources)}\n")
+              out.write(f"sources={json.dumps(sources)}\n")
+          EOF
+        env:
+          INPUT_SOURCE_ID: ${{ github.event.inputs.source_id }}
+
+      - name: HTTP reachability check for web/api sources
+        run: |
+          python3 << 'EOF'
+          import csv
+          import json
+          import os
+          import sys
+          import urllib.request
+          import urllib.error
+
+          TIMEOUT = 15
+          SKIP_TYPES = {"csv", "manual", "pdf"}
+          SKIP_URLS = {"manual"}
+
+          failures = []
+          warnings = []
+
+          with open("seed/source-registry/source_registry.csv", newline="") as f:
+              reader = csv.DictReader(f)
+              for row in reader:
+                  source_id = row["source_id"]
+                  base_url = row.get("base_url", "").strip()
+                  crawler_type = row.get("crawler_type", "").strip()
+                  active = row.get("active", "").lower()
+
+                  if active != "true":
+                      continue
+                  if crawler_type in SKIP_TYPES or base_url in SKIP_URLS:
+                      print(f"SKIP [{source_id}]: crawler_type={crawler_type} — skipping reachability check")
+                      continue
+
+                  target_source = os.environ.get("INPUT_SOURCE_ID", "").strip()
+                  if target_source and source_id != target_source:
+                      continue
+
+                  try:
+                      req = urllib.request.Request(
+                          base_url,
+                          headers={"User-Agent": "XPS-Intelligence-SmokeTest/1.0"},
+                      )
+                      with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                          status = resp.status
+                          if status < 400:
+                              print(f"OK  [{source_id}]: HTTP {status} — {base_url}")
+                          else:
+                              warnings.append(f"WARN [{source_id}]: HTTP {status} — {base_url}")
+                              print(warnings[-1])
+                  except urllib.error.HTTPError as e:
+                      if e.code in (401, 403):
+                          # Auth-required is expected for API sources
+                          print(f"AUTH [{source_id}]: HTTP {e.code} (auth required) — {base_url}")
+                      elif e.code == 429:
+                          warnings.append(f"WARN [{source_id}]: HTTP 429 (rate limited) — {base_url}")
+                          print(warnings[-1])
+                      else:
+                          failures.append(f"FAIL [{source_id}]: HTTP {e.code} — {base_url}")
+                          print(failures[-1])
+                  except Exception as e:
+                      failures.append(f"FAIL [{source_id}]: {type(e).__name__}: {e} — {base_url}")
+                      print(failures[-1])
+
+          print(f"\n--- Smoke Test Results ---")
+          print(f"Warnings: {len(warnings)}")
+          print(f"Failures: {len(failures)}")
+
+          if failures:
+              print("\nFailed sources:")
+              for f in failures:
+                  print(f"  {f}")
+              sys.exit(1)
+          EOF
+        env:
+          INPUT_SOURCE_ID: ${{ github.event.inputs.source_id }}
+
+      - name: Write smoke test summary
+        if: always()
+        run: |
+          echo "## 🕵️ Crawler Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Active sources tested:** ${{ steps.parse_sources.outputs.source_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run date:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ github.event.inputs.source_id }}" ]; then
+            echo "**Filtered to source:** \`${{ github.event.inputs.source_id }}\`" >> $GITHUB_STEP_SUMMARY
+          fi

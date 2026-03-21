@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.com/schemas/crm/hubspot_mapping.v1.json",
+  "title": "HubSpot CRM Field Mapping v1",
+  "description": "Defines the mapping between XPS normalized company/contact fields and HubSpot CRM object properties.",
+  "version": "1.0.0",
+  "company_object_mappings": [
+    {
+      "xps_field": "name",
+      "hubspot_property": "name",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": true,
+      "notes": "HubSpot built-in company name property."
+    },
+    {
+      "xps_field": "domain",
+      "hubspot_property": "domain",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": true,
+      "notes": "HubSpot built-in website domain property."
+    },
+    {
+      "xps_field": "description",
+      "hubspot_property": "description",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in company description."
+    },
+    {
+      "xps_field": "industry",
+      "hubspot_property": "industry",
+      "hubspot_object": "company",
+      "type": "enumeration",
+      "required": false,
+      "notes": "HubSpot built-in industry field. Values must match HubSpot enumeration options."
+    },
+    {
+      "xps_field": "employee_range",
+      "hubspot_property": "xps_employee_range",
+      "hubspot_object": "company",
+      "type": "enumeration",
+      "required": false,
+      "custom_property": true,
+      "notes": "Custom XPS property. Must be created in HubSpot before activation."
+    },
+    {
+      "xps_field": "revenue_range",
+      "hubspot_property": "xps_revenue_range",
+      "hubspot_object": "company",
+      "type": "enumeration",
+      "required": false,
+      "custom_property": true,
+      "notes": "Custom XPS property."
+    },
+    {
+      "xps_field": "hq_country",
+      "hubspot_property": "country",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in country property. ISO 3166-1 alpha-2."
+    },
+    {
+      "xps_field": "hq_city",
+      "hubspot_property": "city",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in city property."
+    },
+    {
+      "xps_field": "linkedin_url",
+      "hubspot_property": "linkedin_company_page",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in LinkedIn company page property."
+    },
+    {
+      "xps_field": "lifecycle_stage",
+      "hubspot_property": "xps_lifecycle_stage",
+      "hubspot_object": "company",
+      "type": "enumeration",
+      "required": false,
+      "custom_property": true,
+      "notes": "Custom XPS property reflecting company growth stage."
+    },
+    {
+      "xps_field": "founded_year",
+      "hubspot_property": "founded_year",
+      "hubspot_object": "company",
+      "type": "number",
+      "required": false,
+      "notes": "HubSpot built-in founded year property."
+    },
+    {
+      "xps_field": "technologies",
+      "hubspot_property": "xps_technologies",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "custom_property": true,
+      "notes": "Comma-separated list of detected technologies. Custom XPS property."
+    },
+    {
+      "xps_field": "enrichment_score",
+      "hubspot_property": "xps_enrichment_score",
+      "hubspot_object": "company",
+      "type": "number",
+      "required": false,
+      "custom_property": true,
+      "notes": "XPS data quality score 0-100. Custom XPS property."
+    },
+    {
+      "xps_field": "activation_score",
+      "hubspot_property": "xps_activation_score",
+      "hubspot_object": "company",
+      "type": "number",
+      "required": false,
+      "custom_property": true,
+      "notes": "XPS lead quality score 0-100 at time of activation. Custom XPS property."
+    },
+    {
+      "xps_field": "company_id",
+      "hubspot_property": "xps_company_id",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "custom_property": true,
+      "notes": "XPS internal company UUID for cross-referencing. Custom XPS property."
+    },
+    {
+      "xps_field": "source_ids",
+      "hubspot_property": "xps_source_ids",
+      "hubspot_object": "company",
+      "type": "string",
+      "required": false,
+      "custom_property": true,
+      "notes": "Semicolon-separated list of XPS source IDs. Custom XPS property."
+    }
+  ],
+  "contact_object_mappings": [
+    {
+      "xps_field": "contact_name",
+      "hubspot_property": "firstname",
+      "hubspot_object": "contact",
+      "type": "string",
+      "required": false,
+      "notes": "First name extracted from full name. HubSpot built-in."
+    },
+    {
+      "xps_field": "contact_email",
+      "hubspot_property": "email",
+      "hubspot_object": "contact",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in email property. Primary deduplication key."
+    },
+    {
+      "xps_field": "contact_title",
+      "hubspot_property": "jobtitle",
+      "hubspot_object": "contact",
+      "type": "string",
+      "required": false,
+      "notes": "HubSpot built-in job title property."
+    },
+    {
+      "xps_field": "contact_seniority",
+      "hubspot_property": "xps_contact_seniority",
+      "hubspot_object": "contact",
+      "type": "enumeration",
+      "required": false,
+      "custom_property": true,
+      "notes": "Seniority level inferred from title. Custom XPS property."
+    }
+  ],
+  "custom_properties_to_create": [
+    {
+      "object_type": "company",
+      "property_name": "xps_employee_range",
+      "label": "XPS Employee Range",
+      "type": "enumeration",
+      "field_type": "select",
+      "options": ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10001+"],
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_revenue_range",
+      "label": "XPS Revenue Range",
+      "type": "enumeration",
+      "field_type": "select",
+      "options": ["< $1M", "$1M - $10M", "$10M - $50M", "$50M - $100M", "$100M - $500M", "$500M - $1B", "> $1B"],
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_lifecycle_stage",
+      "label": "XPS Lifecycle Stage",
+      "type": "enumeration",
+      "field_type": "select",
+      "options": ["pre-seed", "seed", "series-a", "series-b", "series-c+", "growth", "established", "enterprise", "unknown"],
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_technologies",
+      "label": "XPS Technologies",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_enrichment_score",
+      "label": "XPS Enrichment Score",
+      "type": "number",
+      "field_type": "number",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_activation_score",
+      "label": "XPS Activation Score",
+      "type": "number",
+      "field_type": "number",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_company_id",
+      "label": "XPS Company ID",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "company",
+      "property_name": "xps_source_ids",
+      "label": "XPS Source IDs",
+      "type": "string",
+      "field_type": "text",
+      "group_name": "xps_intelligence"
+    },
+    {
+      "object_type": "contact",
+      "property_name": "xps_contact_seniority",
+      "label": "XPS Contact Seniority",
+      "type": "enumeration",
+      "field_type": "select",
+      "options": ["c-suite", "vp", "director", "manager", "individual-contributor", "founder", "unknown"],
+      "group_name": "xps_intelligence"
+    }
+  ],
+  "property_group": {
+    "name": "xps_intelligence",
+    "label": "XPS Intelligence",
+    "object_type": "company"
+  }
+}

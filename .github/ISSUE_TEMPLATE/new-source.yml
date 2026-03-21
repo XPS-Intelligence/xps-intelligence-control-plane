@@ -1,0 +1,142 @@
+name: New Data Source
+description: Register and request implementation of a new data source adapter
+title: "[New Source] <source_name>"
+labels:
+  - "new-source"
+  - "data-pipeline"
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## New Data Source Request
+        Use this template to register a new data source and request a crawler/adapter implementation.
+        See `seed/source-registry/source_registry.csv` for existing sources.
+
+  - type: input
+    id: source_name
+    attributes:
+      label: Source Name
+      description: Human-readable name of the data source
+      placeholder: "e.g. TechCrunch Startups"
+    validations:
+      required: true
+
+  - type: input
+    id: source_id
+    attributes:
+      label: Source ID (slug)
+      description: Unique identifier slug (lowercase, underscores). Will be used as source_id in the registry.
+      placeholder: "e.g. techcrunch_startups"
+    validations:
+      required: true
+
+  - type: input
+    id: base_url
+    attributes:
+      label: Base URL
+      description: Primary URL of the data source
+      placeholder: "https://techcrunch.com/startups/"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: crawler_type
+    attributes:
+      label: Crawler / Adapter Type
+      description: How should data be collected from this source?
+      options:
+        - web (HTML scraping)
+        - api (REST or GraphQL API)
+        - rss (RSS/Atom feed)
+        - sitemap (XML sitemap)
+        - csv (CSV file / export)
+        - pdf (PDF document)
+        - manual (manual upload)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: refresh_cadence
+    attributes:
+      label: Desired Refresh Cadence
+      description: How often should this source be crawled?
+      options:
+        - nightly (recommended default)
+        - daily
+        - weekly
+        - monthly
+        - manual
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Source Description
+      description: What data does this source provide? What makes it valuable?
+      placeholder: "This source provides funding announcements and new startup profiles..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample_data
+    attributes:
+      label: Sample Data
+      description: Paste an example of the raw data this source returns (JSON, HTML snippet, CSV row, etc.)
+      render: json
+    validations:
+      required: false
+
+  - type: textarea
+    id: field_mapping
+    attributes:
+      label: Proposed Field Mapping
+      description: How do the source's fields map to the XPS normalized company record fields?
+      placeholder: |
+        source.company_name → name
+        source.website → domain
+        source.employee_count → employee_range
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: authentication
+    attributes:
+      label: Authentication Requirements
+      options:
+        - label: No authentication required (public data)
+        - label: Requires API key
+        - label: Requires OAuth
+        - label: Requires browser session / cookies
+        - label: Requires paid subscription
+
+  - type: textarea
+    id: rate_limits
+    attributes:
+      label: Known Rate Limits or Restrictions
+      description: Are there any known rate limits, robots.txt restrictions, or terms of service considerations?
+    validations:
+      required: false
+
+  - type: input
+    id: owner
+    attributes:
+      label: Requesting Owner
+      description: GitHub username of the person responsible for this source
+      placeholder: "@username"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have verified this source is not already in `seed/source-registry/source_registry.csv`
+          required: true
+        - label: I have confirmed the data is legally scrapeable / accessible per the source's ToS
+          required: true
+        - label: I have identified at least one XPS normalized field this source can populate
+          required: true

@@ -1,0 +1,65 @@
+industry,industry_sub,description,icp_tier
+Software,Developer Tools,Software development tools and platforms,1
+Software,SaaS / B2B,Business software sold as a service,1
+Software,Security,Cybersecurity and information security software,1
+Software,Data & Analytics,Data management analytics and business intelligence,1
+Software,AI / Machine Learning,Artificial intelligence and ML platforms,1
+Software,Infrastructure / DevOps,Cloud infrastructure DevOps and platform engineering,1
+Software,Collaboration & Productivity,Team collaboration and productivity tools,1
+Software,Finance & Accounting,Financial management and accounting software,1
+Software,HR & Recruiting,Human resources recruiting and workforce management,2
+Software,Marketing Automation,Marketing automation and campaign management software,2
+Software,Customer Success,Customer success and support software,2
+Software,Sales Enablement,Sales tools CRM and revenue operations software,1
+Software,E-commerce,Online retail and e-commerce platforms,2
+Software,Legal Tech,Legal practice management and compliance software,2
+Software,Health Tech,Healthcare software and medical systems,2
+Software,Ed Tech,Educational software and learning management systems,3
+Software,Real Estate Tech,Property management and real estate software,3
+Software,Logistics & Supply Chain,Supply chain and logistics management software,2
+Software,Manufacturing & Operations,Manufacturing operations and ERP systems,2
+Software,Other,Other software not categorized above,3
+Technology Services,IT Consulting,Information technology consulting and managed services,2
+Technology Services,Systems Integration,Technology systems integration and implementation,2
+Technology Services,Outsourcing,IT and business process outsourcing,3
+Technology Services,Other,Other technology services,3
+Financial Services,Fintech,Financial technology startups and platforms,1
+Financial Services,Banking,Commercial and retail banking,2
+Financial Services,Insurance,Insurance companies and insurtechs,2
+Financial Services,Investment Management,Asset management venture capital and private equity,2
+Financial Services,Payments,Payment processing and merchant services,1
+Financial Services,Other,Other financial services,3
+Healthcare,Digital Health,Digital health platforms and healthtech,2
+Healthcare,Medical Devices,Medical device manufacturers,2
+Healthcare,Pharmaceuticals,Pharmaceutical companies and biotechs,2
+Healthcare,Healthcare Services,Hospitals clinics and healthcare service providers,3
+Healthcare,Other,Other healthcare companies,3
+Media & Communications,Content & Media,Digital media content creation and publishing,2
+Media & Communications,Advertising Tech,Advertising technology and programmatic platforms,2
+Media & Communications,Social Media,Social media platforms and communities,2
+Media & Communications,Telecommunications,Telecom carriers and communications infrastructure,3
+Media & Communications,Other,Other media and communications,3
+Retail & Consumer,Consumer Goods,Consumer product brands and FMCG,3
+Retail & Consumer,Retail,Physical and online retail operations,3
+Retail & Consumer,Food & Beverage,Food and beverage companies,3
+Retail & Consumer,Fashion & Apparel,Clothing footwear and accessories brands,3
+Retail & Consumer,Other,Other retail and consumer companies,3
+Industrial & Manufacturing,Aerospace & Defense,Aerospace defense and space companies,2
+Industrial & Manufacturing,Automotive,Automotive manufacturers and suppliers,3
+Industrial & Manufacturing,Energy,Energy companies oil gas and renewables,2
+Industrial & Manufacturing,Construction,Construction and building materials,3
+Industrial & Manufacturing,Other,Other industrial and manufacturing companies,3
+Professional Services,Consulting,Strategy management and business consulting,2
+Professional Services,Accounting,Accounting and auditing firms,3
+Professional Services,Legal,Law firms and legal services,3
+Professional Services,Marketing & PR,Marketing agencies and public relations firms,2
+Professional Services,Recruiting,Staffing and executive search firms,3
+Professional Services,Other,Other professional services,3
+Education,Higher Education,Universities and colleges,3
+Education,K-12,Primary and secondary education,3
+Education,Vocational Training,Vocational and professional certification programs,3
+Education,Other,Other education organizations,3
+Government & Nonprofit,Government,Federal state and local government agencies,3
+Government & Nonprofit,Nonprofit,Nonprofit and charitable organizations,3
+Government & Nonprofit,Other,Other government and nonprofit entities,3
+Unknown,,Industry not yet classified,3

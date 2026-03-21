@@ -1,0 +1,143 @@
+name: Bug Report
+description: Report a defect in the data pipeline, crawler, schema, or integration
+title: "[Bug] <short description>"
+labels:
+  - "bug"
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        Thank you for reporting an issue! Please fill in as much detail as possible to help us reproduce and fix it quickly.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of the system is affected?
+      options:
+        - Crawler / Source Adapter
+        - Raw Ingestion (Supabase raw_records)
+        - Normalization Pipeline
+        - Enrichment Service
+        - HubSpot Activation
+        - GitHub Actions Workflow (CI)
+        - GitHub Actions Workflow (deploy-railway)
+        - GitHub Actions Workflow (nightly-enrich)
+        - GitHub Actions Workflow (crawler-smoke)
+        - Schema Definition
+        - Seed Data (source registry / taxonomy)
+        - Integration (Supabase)
+        - Integration (HubSpot)
+        - Integration (Railway)
+        - Integration (Google Apps Script)
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: source_id
+    attributes:
+      label: Source ID (if applicable)
+      description: Which source is affected? Leave blank if not source-specific.
+      placeholder: "e.g. techcrunch_startups"
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Run nightly enrichment workflow
+        2. Observe failure in step "normalize_records"
+        3. Check Supabase dead_letter_queue table
+        4. See error: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_logs
+    attributes:
+      label: Error Logs / Stack Trace
+      description: Paste relevant error messages or log output.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: workflow_run_url
+    attributes:
+      label: GitHub Actions Run URL (if CI failure)
+      description: Link to the failed workflow run
+      placeholder: "https://github.com/XPS-Intelligence/xps-intelligence-control-plane/actions/runs/..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Production (Railway)
+        - Staging (Railway)
+        - Local Development
+    validations:
+      required: true
+
+  - type: input
+    id: commit_sha
+    attributes:
+      label: Commit SHA or Branch
+      description: What version of the code was running when the bug occurred?
+      placeholder: "main @ abc1234"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (pipeline down / data loss)
+        - High (major functionality broken)
+        - Medium (functionality impaired but workaround exists)
+        - Low (minor issue / cosmetic)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other information that might help diagnose the issue.
+    validations:
+      required: false

@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.com/schemas/activation/lead_activation_record.v1.json",
+  "title": "Lead Activation Record v1",
+  "description": "Record capturing a lead activation event — the act of pushing an enriched company and contact into HubSpot CRM.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "activation_id",
+    "company_id",
+    "activation_score",
+    "activated_at",
+    "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "activation/v1",
+      "description": "Schema version identifier. Must be 'activation/v1'."
+    },
+    "activation_id": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/uuid",
+      "description": "Unique identifier for this activation event."
+    },
+    "company_id": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/uuid",
+      "description": "References the normalized company record that was activated."
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Full name of the primary decision-maker contact.",
+      "maxLength": 200
+    },
+    "contact_first_name": {
+      "type": "string",
+      "description": "First name of the contact.",
+      "maxLength": 100
+    },
+    "contact_last_name": {
+      "type": "string",
+      "description": "Last name of the contact.",
+      "maxLength": 100
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address of the contact."
+    },
+    "contact_title": {
+      "type": "string",
+      "description": "Job title of the contact.",
+      "maxLength": 200
+    },
+    "contact_linkedin_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "LinkedIn profile URL of the contact.",
+      "pattern": "^https://(www\\.)?linkedin\\.com/in/"
+    },
+    "contact_seniority": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/contact_seniority"
+    },
+    "intent_signals": {
+      "type": "array",
+      "description": "Detected intent signals that contributed to the activation decision.",
+      "items": {
+        "type": "object",
+        "required": ["signal_type", "detected_at"],
+        "properties": {
+          "signal_type": {
+            "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/intent_signal_type"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the signal.",
+            "maxLength": 300
+          },
+          "detected_at": {
+            "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/iso8601_datetime"
+          },
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL where this signal was observed."
+          }
+        },
+        "additionalProperties": false
+      },
+      "maxItems": 20
+    },
+    "activation_score": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score",
+      "description": "Lead quality score at time of activation. Range 0-100."
+    },
+    "score_factors": {
+      "type": "object",
+      "description": "Breakdown of what contributed to the activation score.",
+      "properties": {
+        "enrichment_completeness": {
+          "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score"
+        },
+        "intent_strength": {
+          "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score"
+        },
+        "icp_fit": {
+          "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score"
+        },
+        "contact_quality": {
+          "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/score"
+        }
+      },
+      "additionalProperties": false
+    },
+    "hubspot_company_id": {
+      "type": "string",
+      "description": "HubSpot Company object ID assigned after successful push.",
+      "pattern": "^[0-9]+$"
+    },
+    "hubspot_contact_id": {
+      "type": "string",
+      "description": "HubSpot Contact object ID assigned after successful push.",
+      "pattern": "^[0-9]+$"
+    },
+    "activated_at": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/iso8601_datetime",
+      "description": "UTC timestamp when the activation was attempted."
+    },
+    "status": {
+      "$ref": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json#/definitions/activation_status",
+      "description": "Current status of the activation."
+    },
+    "error_code": {
+      "type": "string",
+      "description": "Error code if status is 'failed'.",
+      "maxLength": 50
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Human-readable error message if status is 'failed'.",
+      "maxLength": 500
+    },
+    "retry_count": {
+      "type": "integer",
+      "description": "Number of times activation has been retried.",
+      "minimum": 0,
+      "maximum": 10,
+      "default": 0
+    }
+  },
+  "examples": [
+    {
+      "schema_version": "activation/v1",
+      "activation_id": "550e8400-e29b-41d4-a716-446655440002",
+      "company_id": "550e8400-e29b-41d4-a716-446655440001",
+      "contact_name": "Jane Smith",
+      "contact_first_name": "Jane",
+      "contact_last_name": "Smith",
+      "contact_email": "jane.smith@acmecorp.com",
+      "contact_title": "VP of Engineering",
+      "contact_seniority": "vp",
+      "intent_signals": [
+        {
+          "signal_type": "job_posting",
+          "description": "Posted 3 senior engineer roles in the last 30 days",
+          "detected_at": "2025-01-14T10:00:00Z",
+          "source_url": "https://acmecorp.com/careers"
+        }
+      ],
+      "activation_score": 87,
+      "score_factors": {
+        "enrichment_completeness": 90,
+        "intent_strength": 85,
+        "icp_fit": 88,
+        "contact_quality": 80
+      },
+      "hubspot_company_id": "12345678",
+      "hubspot_contact_id": "87654321",
+      "activated_at": "2025-01-15T09:30:00Z",
+      "status": "pushed",
+      "retry_count": 0
+    }
+  ]
+}

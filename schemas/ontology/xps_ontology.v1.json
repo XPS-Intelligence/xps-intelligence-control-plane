@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.com/schemas/ontology/xps_ontology.v1.json",
+  "title": "XPS Intelligence Ontology v1",
+  "description": "Shared vocabulary and controlled vocabularies used across all XPS Intelligence schemas.",
+  "version": "1.0.0",
+  "definitions": {
+    "employee_range": {
+      "type": "string",
+      "title": "Employee Count Range",
+      "enum": [
+        "1-10",
+        "11-50",
+        "51-200",
+        "201-500",
+        "501-1000",
+        "1001-5000",
+        "5001-10000",
+        "10001+"
+      ]
+    },
+    "revenue_range": {
+      "type": "string",
+      "title": "Annual Revenue Range (USD)",
+      "enum": [
+        "< $1M",
+        "$1M - $10M",
+        "$10M - $50M",
+        "$50M - $100M",
+        "$100M - $500M",
+        "$500M - $1B",
+        "> $1B"
+      ]
+    },
+    "company_type": {
+      "type": "string",
+      "title": "Legal Company Type",
+      "enum": [
+        "private",
+        "public",
+        "nonprofit",
+        "government",
+        "subsidiary",
+        "partnership",
+        "sole_proprietorship",
+        "unknown"
+      ]
+    },
+    "lifecycle_stage": {
+      "type": "string",
+      "title": "Company Lifecycle Stage",
+      "enum": [
+        "pre-seed",
+        "seed",
+        "series-a",
+        "series-b",
+        "series-c+",
+        "growth",
+        "established",
+        "enterprise",
+        "unknown"
+      ]
+    },
+    "crawler_type": {
+      "type": "string",
+      "title": "Crawler / Adapter Type",
+      "enum": [
+        "web",
+        "api",
+        "rss",
+        "sitemap",
+        "pdf",
+        "csv",
+        "manual"
+      ]
+    },
+    "refresh_cadence": {
+      "type": "string",
+      "title": "Source Refresh Cadence",
+      "enum": [
+        "realtime",
+        "hourly",
+        "daily",
+        "nightly",
+        "weekly",
+        "monthly",
+        "manual"
+      ]
+    },
+    "activation_status": {
+      "type": "string",
+      "title": "Lead Activation Status",
+      "enum": [
+        "pending",
+        "pushed",
+        "failed",
+        "suppressed",
+        "duplicate"
+      ]
+    },
+    "intent_signal_type": {
+      "type": "string",
+      "title": "Intent Signal Category",
+      "enum": [
+        "job_posting",
+        "funding_event",
+        "product_launch",
+        "executive_hire",
+        "expansion",
+        "technology_adoption",
+        "partnership_announcement",
+        "conference_attendance",
+        "content_engagement",
+        "website_visit"
+      ]
+    },
+    "contact_seniority": {
+      "type": "string",
+      "title": "Contact Seniority Level",
+      "enum": [
+        "c-suite",
+        "vp",
+        "director",
+        "manager",
+        "individual-contributor",
+        "founder",
+        "unknown"
+      ]
+    },
+    "country_code": {
+      "type": "string",
+      "title": "ISO 3166-1 alpha-2 Country Code",
+      "pattern": "^[A-Z]{2}$",
+      "examples": ["US", "GB", "DE", "AU", "CA"]
+    },
+    "uuid": {
+      "type": "string",
+      "title": "UUID v4",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "iso8601_datetime": {
+      "type": "string",
+      "title": "ISO 8601 UTC Datetime",
+      "format": "date-time",
+      "examples": ["2025-01-15T09:30:00Z"]
+    },
+    "domain": {
+      "type": "string",
+      "title": "Web Domain",
+      "pattern": "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z]{2,})+$",
+      "examples": ["acmecorp.com", "startup.io", "enterprise.co.uk"]
+    },
+    "score": {
+      "type": "number",
+      "title": "Quality / Activation Score",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

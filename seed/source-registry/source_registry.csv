@@ -1,0 +1,16 @@
+source_id,name,description,crawler_type,base_url,refresh_cadence,owner,active,notes
+techcrunch_startups,TechCrunch Startups,TechCrunch startup company listings and funding announcements,web,https://techcrunch.com/startups/,nightly,data-team,true,Requires rate limiting to 1 req/s
+producthunt_launches,Product Hunt Launches,New product launches on Product Hunt,api,https://api.producthunt.com/v2/api/graphql,daily,data-team,true,Requires PH API token
+linkedin_company_feed,LinkedIn Company Feed,LinkedIn company profiles via search,web,https://www.linkedin.com/search/results/companies/,weekly,data-team,false,Manual review required; use cautiously
+crunchbase_organizations,Crunchbase Organizations,Company data from Crunchbase API,api,https://api.crunchbase.com/api/v4/,nightly,data-team,true,Requires Crunchbase API key
+ycombinator_companies,Y Combinator Companies,YC batch company directory,web,https://www.ycombinator.com/companies,weekly,data-team,true,
+angellist_startups,AngelList Startups,AngelList company listings,api,https://angel.co/api,weekly,data-team,false,API deprecated; monitor for replacement
+g2_reviews,G2 Software Reviews,Companies with active G2 profiles,web,https://www.g2.com/categories/,weekly,data-team,true,Filter by category
+capterra_listings,Capterra Software Listings,Software companies listed on Capterra,web,https://www.capterra.com/,weekly,data-team,true,
+github_trending,GitHub Trending Organizations,Organizations behind trending GitHub repos,api,https://api.github.com/,daily,engineering,true,
+builtwith_technology,BuiltWith Technology Lookup,Tech stack detection for target domains,api,https://api.builtwith.com/,weekly,data-team,false,Paid API; use sparingly
+pitchbook_funding,PitchBook Funding Events,Recent funding rounds from PitchBook export,csv,manual,weekly,data-team,false,Manual CSV export required
+sec_edgar_filings,SEC EDGAR Filings,Public company filings from SEC EDGAR,api,https://efts.sec.gov/LATEST/search-index?,nightly,data-team,true,Free API; high volume
+job_boards_greenhouse,Greenhouse Job Boards,Active job postings via Greenhouse API,api,https://boards-api.greenhouse.io/v1/,nightly,data-team,true,Detects hiring intent signals
+job_boards_lever,Lever Job Boards,Active job postings via Lever API,api,https://api.lever.co/v1/,nightly,data-team,true,Detects hiring intent signals
+hacker_news_show,Hacker News Show HN,Companies launching on Hacker News Show HN,api,https://hacker-news.firebaseio.com/v0/,daily,engineering,true,Filter Show HN posts only

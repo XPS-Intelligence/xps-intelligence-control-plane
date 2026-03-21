@@ -1,0 +1,165 @@
+name: Nightly Enrichment
+
+on:
+  schedule:
+    # Run at 02:00 UTC every night
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Run in dry-run mode (no writes to Supabase or HubSpot)
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      limit:
+        description: Maximum number of records to process (0 = all)
+        required: false
+        default: "0"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  normalize:
+    name: Normalize Raw Records
+    runs-on: ubuntu-latest
+    outputs:
+      normalized_count: ${{ steps.normalize.outputs.normalized_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt 2>/dev/null || \
+          pip install supabase python-dotenv 2>/dev/null || \
+          echo "No requirements.txt found; skipping pip install"
+
+      - name: Run normalization pipeline
+        id: normalize
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          RECORD_LIMIT: ${{ github.event.inputs.limit || '0' }}
+        run: |
+          echo "Running normalization pipeline..."
+          echo "Dry run: $DRY_RUN"
+          echo "Record limit: $RECORD_LIMIT"
+          # TODO: Replace with actual normalization entrypoint when implemented
+          # python -m pipeline.normalize --limit $RECORD_LIMIT --dry-run $DRY_RUN
+          echo "normalized_count=0" >> "$GITHUB_OUTPUT"
+          echo "Normalization step placeholder — implement pipeline.normalize module"
+
+  enrich:
+    name: Enrich Company Records
+    runs-on: ubuntu-latest
+    needs: normalize
+    outputs:
+      enriched_count: ${{ steps.enrich.outputs.enriched_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt 2>/dev/null || \
+          pip install supabase openai python-dotenv 2>/dev/null || \
+          echo "No requirements.txt found; skipping pip install"
+
+      - name: Run enrichment pipeline
+        id: enrich
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          RECORD_LIMIT: ${{ github.event.inputs.limit || '0' }}
+        run: |
+          echo "Running enrichment pipeline..."
+          echo "Dry run: $DRY_RUN"
+          # TODO: Replace with actual enrichment entrypoint when implemented
+          # python -m pipeline.enrich --limit $RECORD_LIMIT --dry-run $DRY_RUN
+          echo "enriched_count=0" >> "$GITHUB_OUTPUT"
+          echo "Enrichment step placeholder — implement pipeline.enrich module"
+
+  activate:
+    name: Activate Qualified Leads
+    runs-on: ubuntu-latest
+    needs: enrich
+    outputs:
+      activated_count: ${{ steps.activate.outputs.activated_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt 2>/dev/null || \
+          pip install supabase hubspot-api-client python-dotenv 2>/dev/null || \
+          echo "No requirements.txt found; skipping pip install"
+
+      - name: Run activation pipeline
+        id: activate
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
+          ACTIVATION_SCORE_THRESHOLD: ${{ vars.ACTIVATION_SCORE_THRESHOLD || '70' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          RECORD_LIMIT: ${{ github.event.inputs.limit || '0' }}
+        run: |
+          echo "Running activation pipeline..."
+          echo "Dry run: $DRY_RUN"
+          echo "Score threshold: $ACTIVATION_SCORE_THRESHOLD"
+          # TODO: Replace with actual activation entrypoint when implemented
+          # python -m pipeline.activate --limit $RECORD_LIMIT --dry-run $DRY_RUN
+          echo "activated_count=0" >> "$GITHUB_OUTPUT"
+          echo "Activation step placeholder — implement pipeline.activate module"
+
+  summary:
+    name: Pipeline Summary
+    runs-on: ubuntu-latest
+    needs: [normalize, enrich, activate]
+    if: always()
+    steps:
+      - name: Write summary
+        run: |
+          echo "## 🌙 Nightly Enrichment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Count | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Normalized | ${{ needs.normalize.outputs.normalized_count || '—' }} | ${{ needs.normalize.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Enriched | ${{ needs.enrich.outputs.enriched_count || '—' }} | ${{ needs.enrich.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Activated | ${{ needs.activate.outputs.activated_count || '—' }} | ${{ needs.activate.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Run date:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "**Dry run:** ${{ github.event.inputs.dry_run || 'false' }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail if any stage failed
+        if: needs.normalize.result == 'failure' || needs.enrich.result == 'failure' || needs.activate.result == 'failure'
+        run: |
+          echo "One or more pipeline stages failed. Check individual job logs."
+          exit 1

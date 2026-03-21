@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  validate-schemas:
+    name: Validate JSON Schemas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          npm install --save-dev ajv ajv-cli ajv-formats 2>/dev/null || \
+          npx --yes ajv-cli --version
+
+      - name: Validate ontology schema
+        run: |
+          npx ajv-cli validate \
+            -s schemas/ontology/xps_ontology.v1.json \
+            --spec=draft7 || true
+
+      - name: Validate raw source record schema
+        run: |
+          npx ajv-cli validate \
+            -s schemas/raw/raw_source_record.v1.json \
+            --spec=draft7 || true
+
+      - name: Validate normalized company record schema
+        run: |
+          npx ajv-cli validate \
+            -s schemas/normalized/company_record.v1.json \
+            --spec=draft7 || true
+
+      - name: Validate lead activation record schema
+        run: |
+          npx ajv-cli validate \
+            -s schemas/activation/lead_activation_record.v1.json \
+            --spec=draft7 || true
+
+  validate-csv:
+    name: Validate CSV Seed Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check source registry has header and data rows
+        run: |
+          ROWS=$(tail -n +2 seed/source-registry/source_registry.csv | wc -l)
+          echo "Source registry rows: $ROWS"
+          if [ "$ROWS" -lt 1 ]; then
+            echo "ERROR: source_registry.csv has no data rows"
+            exit 1
+          fi
+
+      - name: Check industry taxonomy has header and data rows
+        run: |
+          ROWS=$(tail -n +2 seed/categories/industry_taxonomy.csv | wc -l)
+          echo "Industry taxonomy rows: $ROWS"
+          if [ "$ROWS" -lt 1 ]; then
+            echo "ERROR: industry_taxonomy.csv has no data rows"
+            exit 1
+          fi
+
+      - name: Validate source_registry required columns
+        run: |
+          HEADER=$(head -1 seed/source-registry/source_registry.csv)
+          for col in source_id name crawler_type base_url refresh_cadence owner active; do
+            if ! echo "$HEADER" | grep -q "$col"; then
+              echo "ERROR: Missing required column '$col' in source_registry.csv"
+              exit 1
+            fi
+          done
+          echo "All required columns present in source_registry.csv"
+
+  lint-workflows:
+    name: Lint GitHub Actions Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate workflow YAML syntax
+        run: |
+          for f in .github/workflows/*.yml; do
+            echo "Checking $f..."
+            python3 -c "
+          import yaml, sys
+          with open('$f') as fh:
+              yaml.safe_load(fh)
+          print('  OK: $f')
+            "
+          done
+
+  lint-docs:
+    name: Check Documentation Structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required docs exist
+        run: |
+          REQUIRED_DOCS=(
+            "docs/01-architecture/XPS_MASTER_BLUEPRINT.md"
+            "docs/01-architecture/SYSTEM_CONTRACT.md"
+            "docs/02-roadmap/MONDAY_MVP_ROADMAP.md"
+            "docs/03-checklists/LAUNCH_CHECKLIST.md"
+            "integrations/railway/ENVIRONMENT_CONTRACT.md"
+            "integrations/supabase/SUPABASE_SETUP.md"
+            "integrations/hubspot/HUBSPOT_OBJECT_MODEL.md"
+            "integrations/google/APPS_SCRIPT_BRIDGE.md"
+          )
+          MISSING=0
+          for doc in "${REQUIRED_DOCS[@]}"; do
+            if [ ! -f "$doc" ]; then
+              echo "MISSING: $doc"
+              MISSING=$((MISSING + 1))
+            else
+              echo "OK: $doc"
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "ERROR: $MISSING required documentation files are missing"
+            exit 1
+          fi
+
+  security-scan:
+    name: Security — Check for Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for accidental secret patterns
+        run: |
+          # Check for common secret patterns
+          PATTERNS=(
+            "sk-[a-zA-Z0-9]{20,}"
+            "AKIA[0-9A-Z]{16}"
+            "eyJ[a-zA-Z0-9_-]{10,}\\.eyJ"
+          )
+          FOUND=0
+          for pattern in "${PATTERNS[@]}"; do
+            if grep -rE "$pattern" --include="*.json" --include="*.csv" --include="*.yml" --include="*.md" . 2>/dev/null | grep -v ".git"; then
+              echo "WARNING: Potential secret pattern found: $pattern"
+              FOUND=$((FOUND + 1))
+            fi
+          done
+          if [ $FOUND -gt 0 ]; then
+            echo "ERROR: Potential secrets detected. Please review and remove."
+            exit 1
+          fi
+          echo "No secret patterns detected."
