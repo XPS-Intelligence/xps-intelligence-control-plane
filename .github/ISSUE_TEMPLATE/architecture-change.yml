@@ -1,0 +1,80 @@
+name: Architecture Change Request
+description: Propose a change to system architecture, schemas, or contracts
+title: "[ARCH] "
+labels: ["architecture-change", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Architecture changes affect the entire system. All schema and contract changes require review before implementation.
+
+  - type: dropdown
+    id: change_type
+    attributes:
+      label: Change Type
+      options:
+        - Schema change (breaking)
+        - Schema change (non-breaking addition)
+        - System contract change
+        - Integration contract change
+        - Data flow change
+        - Platform/technology change
+        - Repository structure change
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact Level
+      options:
+        - "HIGH - Affects multiple repos or production data"
+        - "MEDIUM - Affects one repo or one integration"
+        - "LOW - Isolated, no downstream impact"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this change necessary? What problem does it solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed Change
+      description: Describe the exact change. Include schema diffs or contract diffs if applicable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: migration_plan
+    attributes:
+      label: Migration Plan
+      description: For schema changes — how will existing records be migrated? What downstream consumers are affected?
+    validations:
+      required: true
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and Mitigations
+      description: What could go wrong? How will you prevent or recover from failures?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-Review Checklist
+      options:
+        - label: I have read SYSTEM_CONTRACT.md
+          required: true
+        - label: I have identified all consumers of the affected schema or contract
+          required: true
+        - label: Migration plan is documented above
+          required: true
+        - label: No hardcoded credentials or mock data in proposed implementation
+          required: true

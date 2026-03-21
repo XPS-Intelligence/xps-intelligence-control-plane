@@ -1,0 +1,89 @@
+name: Bug Report
+description: Report a bug in the XPS Intelligence system
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report bugs with enough context to reproduce and diagnose. Silent failures are not acceptable — provide full error output.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - "P0 - Production down / data corruption"
+        - "P1 - Major feature broken"
+        - "P2 - Minor feature broken"
+        - "P3 - Cosmetic / low impact"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Ingest API
+        - Normalization Pipeline
+        - Enrichment Engine
+        - Scoring Engine
+        - Activation Gate
+        - HubSpot Sync
+        - Supabase / Data Layer
+        - Google Workspace Bridge
+        - GPT Actions
+        - CI/CD
+        - GitHub Pages
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "production | staging | local"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Paste relevant logs here (sanitize any credentials or PII)
+      render: text
+
+  - type: input
+    id: pipeline_event_id
+    attributes:
+      label: Pipeline Event ID (if applicable)
+      description: UUID from pipeline_events table, if available
+
+  - type: checkboxes
+    id: launch_blocker
+    attributes:
+      label: Launch Blocker?
+      options:
+        - label: This bug blocks production launch — add launch-blocker label

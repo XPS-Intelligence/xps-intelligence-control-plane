@@ -1,0 +1,139 @@
+name: Repo Health Check
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"  # Every Monday at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Control Plane Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for missing documentation
+        run: |
+          echo "=== Documentation Health Check ==="
+          failed=0
+
+          required_docs=(
+            "docs/01-architecture/XPS_MASTER_BLUEPRINT.md"
+            "docs/01-architecture/SYSTEM_CONTRACT.md"
+            "docs/01-architecture/REPOSITORY_MAP.md"
+            "docs/02-roadmap/MONDAY_MVP_ROADMAP.md"
+            "docs/03-checklists/LAUNCH_CHECKLIST.md"
+            "docs/05-security/UNIFIED_CREDENTIAL_AND_ENVIRONMENT_STRATEGY.md"
+            "docs/06-integrations/INTEGRATION_MATRIX.md"
+            "docs/07-prompts/MASTER_INVOCATION_PROMPT.md"
+            "docs/07-prompts/COPILOT_BUILD_PROTOCOL.md"
+          )
+
+          for doc in "${required_docs[@]}"; do
+            if [ ! -f "$doc" ]; then
+              echo "MISSING DOC: $doc"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -eq 0 ]; then
+            echo "All required documentation present"
+          fi
+
+      - name: Check for missing schemas
+        run: |
+          echo "=== Schema Health Check ==="
+          failed=0
+
+          required_schemas=(
+            "schemas/raw/raw_source_record.v1.json"
+            "schemas/normalized/company_record.v1.json"
+            "schemas/normalized/contact_record.v1.json"
+            "schemas/activation/lead_activation_record.v1.json"
+            "schemas/crm/hubspot_mapping.v1.json"
+            "schemas/ontology/xps_ontology.v1.json"
+          )
+
+          for schema in "${required_schemas[@]}"; do
+            if [ ! -f "$schema" ]; then
+              echo "MISSING SCHEMA: $schema"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -eq 0 ]; then
+            echo "All required schemas present"
+          fi
+
+      - name: Check for missing integration specs
+        run: |
+          echo "=== Integration Spec Health Check ==="
+          failed=0
+
+          required_specs=(
+            "integrations/github/GITHUB_PROJECT_AND_AUTOMATION_SPEC.md"
+            "integrations/railway/ENVIRONMENT_CONTRACT.md"
+            "integrations/supabase/SUPABASE_DATA_AND_VECTOR_SPEC.md"
+            "integrations/hubspot/HUBSPOT_OBJECT_MODEL.md"
+            "integrations/google/GOOGLE_WORKSPACE_BRIDGE_SPEC.md"
+            "integrations/openai/OPENAI_GPT_ACTIONS_SCHEMA.md"
+          )
+
+          for spec in "${required_specs[@]}"; do
+            if [ ! -f "$spec" ]; then
+              echo "MISSING SPEC: $spec"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -eq 0 ]; then
+            echo "All required integration specs present"
+          fi
+
+      - name: Check for missing templates
+        run: |
+          echo "=== Template Health Check ==="
+          failed=0
+
+          required_templates=(
+            "templates/repo-template/REPO_TEMPLATE_MANIFEST.md"
+            "templates/service-template/SERVICE_TEMPLATE_MANIFEST.md"
+            "templates/workflow-template/WORKFLOW_TEMPLATE_MANIFEST.md"
+          )
+
+          for template in "${required_templates[@]}"; do
+            if [ ! -f "$template" ]; then
+              echo "MISSING TEMPLATE: $template"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -eq 0 ]; then
+            echo "All required templates present"
+          fi
+
+      - name: Check source registry is populated
+        run: |
+          echo "=== Seed Data Health Check ==="
+          source_count=$(tail -n +2 seed/source-registry/source_registry.csv | grep -c "ACTIVE" || true)
+          echo "Active sources in registry: $source_count"
+          if [ "$source_count" -lt 1 ]; then
+            echo "WARN: No ACTIVE sources in source registry"
+          fi
+
+      - name: Check for stub markers in production files
+        run: |
+          echo "=== Stub Marker Check ==="
+          stub_count=$(grep -r "STUB:" --include="*.ts" --include="*.py" --include="*.js" . 2>/dev/null | grep -v ".git" | wc -l || echo "0")
+          if [ "$stub_count" -gt 0 ]; then
+            echo "WARN: Found $stub_count STUB markers in source files"
+            grep -r "STUB:" --include="*.ts" --include="*.py" --include="*.js" . 2>/dev/null | grep -v ".git" || true
+          else
+            echo "No STUB markers found"
+          fi
+
+      - name: Health check summary
+        run: |
+          echo ""
+          echo "=== Repo Health Check Complete ==="
+          echo "Review output above for any MISSING or WARN items."
