@@ -1,0 +1,7 @@
+source_id,source_name,source_type,provider,description,status,quality_score,contact_email,created_at,notes
+APOLLO_001,Apollo.io Primary,ENRICHMENT_API,Apollo.io,B2B contact and company data enrichment API,ACTIVE,85,engineering@xps-intelligence.com,2024-01-01,Primary Apollo source for contact enrichment
+ZOOMINFO_001,ZoomInfo Enterprise,ENRICHMENT_API,ZoomInfo,Enterprise B2B data platform,PLANNED,90,engineering@xps-intelligence.com,2024-01-01,Pending contract
+CLEARBIT_001,Clearbit Enrichment,ENRICHMENT_API,Clearbit,Real-time company and person enrichment,PLANNED,80,engineering@xps-intelligence.com,2024-01-01,Pending API key
+CSV_UPLOAD_001,Manual CSV Upload,FILE_UPLOAD,Internal,Manually prepared CSV files for batch ingest,ACTIVE,60,engineering@xps-intelligence.com,2024-01-01,Low quality score due to manual preparation
+LINKEDIN_SALES_001,LinkedIn Sales Navigator,MANUAL_EXPORT,LinkedIn,Exported leads from LinkedIn Sales Navigator,ACTIVE,75,engineering@xps-intelligence.com,2024-01-01,Requires manual export and upload
+HUBSPOT_IMPORT_001,HubSpot Import,CRM_IMPORT,HubSpot,Records imported from existing HubSpot instance,ACTIVE,70,engineering@xps-intelligence.com,2024-01-01,For migrating existing CRM data

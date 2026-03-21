@@ -1,0 +1,21 @@
+industry_code,industry_label,parent_category,target_fit,scoring_weight,notes
+SOFTWARE_B2B,B2B Software / SaaS,TECHNOLOGY,HIGH,25,Primary target vertical
+SOFTWARE_B2C,B2C Software / Consumer Tech,TECHNOLOGY,MEDIUM,15,Secondary target
+FINTECH,Financial Technology,TECHNOLOGY,HIGH,25,High-value vertical
+HEALTHTECH,Health Technology,TECHNOLOGY,HIGH,25,High-value vertical
+EDTECH,Education Technology,TECHNOLOGY,MEDIUM,15,Growing vertical
+PROPTECH,Property Technology,TECHNOLOGY,MEDIUM,15,Growing vertical
+LEGALTECH,Legal Technology,TECHNOLOGY,HIGH,20,High-value niche
+MARTECH,Marketing Technology,TECHNOLOGY,HIGH,20,Core XPS use case
+LOGISTICS,Logistics and Supply Chain,OPERATIONS,MEDIUM,15,Operational vertical
+MANUFACTURING,Manufacturing,INDUSTRIAL,LOW,5,Low fit
+PROFESSIONAL_SERVICES,Professional Services,SERVICES,MEDIUM,15,Broad category
+AGENCY,Marketing / Creative Agency,SERVICES,HIGH,20,Strong fit for XPS
+CONSULTING,Business Consulting,SERVICES,HIGH,20,Strong fit for XPS
+ECOMMERCE,E-Commerce / Retail,COMMERCE,MEDIUM,15,Secondary target
+MEDIA,Media and Publishing,MEDIA,LOW,5,Low fit
+TELECOM,Telecommunications,INFRASTRUCTURE,LOW,5,Low fit
+ENERGY,Energy and Utilities,INFRASTRUCTURE,LOW,5,Low fit
+GOVERNMENT,Government and Public Sector,PUBLIC,LOW,0,Out of scope
+NONPROFIT,Non-Profit,PUBLIC,LOW,0,Out of scope
+UNKNOWN,Unknown / Unclassified,UNKNOWN,UNKNOWN,0,Requires classification

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xps-intelligence.github.io/schemas/raw/raw_source_record.v1.json",
+  "title": "RawSourceRecord",
+  "description": "Schema for all raw records arriving at the XPS Intelligence ingest layer. Every record from every source adapter must conform to this schema before being written to raw_records.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_record_id",
+    "record_type",
+    "ingested_at",
+    "raw_payload"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "Unique identifier for the data source. Must match a registered source in seed/source-registry/source_registry.csv.",
+      "pattern": "^[A-Z0-9_]{3,50}$",
+      "examples": ["APOLLO_001", "ZOOMINFO_001", "CSV_UPLOAD_001"]
+    },
+    "source_record_id": {
+      "type": "string",
+      "description": "The unique identifier for this record within the source system. Used for deduplication.",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "record_type": {
+      "type": "string",
+      "description": "The type of record being ingested.",
+      "enum": ["COMPANY", "CONTACT", "COMPANY_CONTACT_PAIR", "DEAL", "UNKNOWN"]
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this record was received by the ingest layer."
+    },
+    "source_created_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this record was created in the source system, if known."
+    },
+    "source_updated_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this record was last updated in the source system, if known."
+    },
+    "raw_payload": {
+      "type": "object",
+      "description": "The complete raw payload from the source, stored as-is for auditability and re-processing."
+    },
+    "ingest_metadata": {
+      "type": ["object", "null"],
+      "description": "Metadata about the ingest operation itself.",
+      "properties": {
+        "adapter_version": {
+          "type": "string",
+          "description": "Version of the source adapter that produced this record."
+        },
+        "batch_id": {
+          "type": ["string", "null"],
+          "description": "Identifier for the ingest batch this record belongs to, if applicable."
+        },
+        "source_file": {
+          "type": ["string", "null"],
+          "description": "Source file name if this record came from a file upload."
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "Processing status of this raw record.",
+      "enum": ["RECEIVED", "PARSED", "NORMALIZED", "DISCARDED"],
+      "default": "RECEIVED"
+    }
+  }
+}

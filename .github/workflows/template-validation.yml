@@ -10,6 +10,9 @@ on:
       - ".github/workflows/**"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate-template-artifacts:
     name: Validate Control Plane Template Artifacts
@@ -107,7 +110,9 @@ jobs:
           )
           failed=0
           for pattern in "${patterns[@]}"; do
-            matches=$(grep -r -E "$pattern" --include="*.json" --include="*.yml" --include="*.yaml" --include="*.ts" --include="*.py" --include="*.js" . 2>/dev/null | grep -v ".git" | grep -v "node_modules" | grep -v "EXAMPLE" || true)
+            matches=$(grep -r -E "$pattern" --include="*.json" --include="*.yml" \
+              --include="*.yaml" --include="*.ts" --include="*.py" --include="*.js" \
+              . 2>/dev/null | grep -v ".git" | grep -v "node_modules" | grep -v "EXAMPLE" || true)
             if [ -n "$matches" ]; then
               echo "WARN: Potential secret pattern detected: $pattern"
               echo "$matches"
