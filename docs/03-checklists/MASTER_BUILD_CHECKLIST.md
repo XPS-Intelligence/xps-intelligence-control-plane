@@ -49,6 +49,8 @@
 - [ ] Railway deploy path is explicit
 - [ ] Docker, GitHub, and Railway state sync path is explicit
 - [ ] CI runs build/test/validation
+- [ ] nightly governance audit exists
+- [ ] nightly backup verification exists
 - [ ] postdeploy smoke exists
 - [ ] health and readiness checks exist
 - [ ] rollback path is documented
@@ -61,3 +63,7 @@
 - [ ] admin control boundaries are documented
 - [ ] MCP and connectivity strategy is documented
 - [ ] local agent framework is documented
+- [ ] release train labels are defined
+- [ ] CODEOWNERS exists for critical repos
+- [ ] self-build loop is documented
+- [ ] benchmark doctrine for OpenAI, Anthropic, and Google patterns is documented

@@ -1,0 +1,15 @@
+name: nightly-governance-audit
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  governance-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate foundation
+        shell: pwsh
+        run: ./bootstrap/validate-foundation.ps1
