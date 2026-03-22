@@ -1,0 +1,65 @@
+# XPS Platform Memory
+
+## Purpose
+This file is the durable rehydration source for the XPS Intelligence ecosystem.
+It captures the platform truth that should survive across chats, sessions, and contributors.
+
+## Canonical ecosystem
+- `xps-intelligence-control-plane` = governance and template authority
+- `xps-intelligence-system` = runtime host
+- `xps-intel` = intelligence authority
+- `xps-distallation-system` = distillation authority
+- `xps-ui` = shared UI and editor foundation
+- `xps-source-adapter-template` = governed scanner/adapter starter
+- `xps-google-workspace-bridge` = workspace integration layer
+- `xps-analytics-bi` = KPI, forecasting, simulation, benchmarking
+- `xps-employee-copilots` = role assistants, skills, prompts, persona packs
+
+## Donor systems
+- `xps-intelligence-system-v.5` = strongest donor for current portal runtime and appearance
+- `xps-intelligence-systems` = environment and integration donor
+- `XPS_INTELLIGENCE_SYSTEM` = large donor with chat/control/scraper concepts
+- `open-lovable` = editor and app-builder donor
+
+## Default platform law
+- GitHub is the source of truth.
+- Railway is the default runtime platform.
+- Docker is the default local integration and validation environment.
+- Postgres is the canonical relational store.
+- Redis is the canonical async execution layer.
+- Next.js is the preferred host frontend.
+- Open source and proven templates should be preferred over novelty stacks.
+
+## Runtime target
+The internal platform must support:
+- employee workspace
+- manager workspace
+- owner workspace
+- admin control plane
+- lead ingestion, validation, scoring, and recommendation
+- proactive assistants with memory, skills, and autonomy modes
+- editable frontend and builder/editor capabilities
+- governed scraper/crawler orchestration
+
+## Canonical data flow
+1. source registry
+2. seed registry
+3. crawl/search job
+4. crawl run
+5. raw observation
+6. parsed observation
+7. entity resolution
+8. canonical entity
+9. validation/enrichment
+10. lead candidate
+11. score
+12. recommendation
+13. CRM activation
+
+## Active build order
+1. control plane memory and contract layer
+2. intelligence and distillation bootstrap
+3. runtime host stabilization
+4. role workspaces and assistant framework
+5. admin control plane and editor
+6. CI/CD, postdeploy smoke, and self-healing operations

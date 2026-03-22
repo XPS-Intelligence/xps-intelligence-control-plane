@@ -74,14 +74,19 @@ Maintain and improve the control plane so it can:
 When relevant, create or maintain:
 
 - `docs/01-architecture/XPS_MASTER_BLUEPRINT.md`
+- `docs/01-architecture/MASTER_INDEX.md`
 - `docs/01-architecture/SYSTEM_CONTRACT.md`
 - `docs/01-architecture/REPOSITORY_MAP.md`
 - `docs/02-roadmap/MONDAY_MVP_ROADMAP.md`
+- `docs/02-roadmap/MASTER_REQUEST_COMPILATION.md`
 - `docs/03-checklists/LAUNCH_CHECKLIST.md`
+- `docs/03-checklists/MASTER_BUILD_CHECKLIST.md`
+- `docs/03-checklists/REFLECTION_LOOP.md`
 - `docs/04-issues/*`
 - `docs/05-security/UNIFIED_CREDENTIAL_AND_ENVIRONMENT_STRATEGY.md`
 - `docs/06-integrations/*`
 - `docs/07-prompts/*`
+- `bootstrap/rehydrate-workspace.ps1`
 - `schemas/raw/*`
 - `schemas/normalized/*`
 - `schemas/activation/*`
