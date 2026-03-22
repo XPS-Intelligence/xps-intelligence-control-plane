@@ -20,3 +20,9 @@
 
 ## Copilots
 - xps-employee-copilots
+
+## Intelligence core
+- xps-intel
+
+## Distillation engine
+- xps-distallation-system
