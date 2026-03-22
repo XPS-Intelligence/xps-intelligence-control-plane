@@ -19,6 +19,8 @@
       "items": [
         { "id": "master_blueprint", "label": "Master blueprint exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\XPS_MASTER_BLUEPRINT.md" },
         { "id": "foundation_blueprint", "label": "Foundation blueprint exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\FOUNDATION_BLUEPRINT.md" },
+        { "id": "enterprise_autonomy_blueprint", "label": "Enterprise autonomy blueprint exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\ENTERPRISE_AUTONOMY_BLUEPRINT.md" },
+        { "id": "full_stack_spec", "label": "Full stack specification exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\FULL_STACK_SPEC.md" },
         { "id": "system_map", "label": "System map exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\SYSTEM_MAP.md" },
         { "id": "master_index", "label": "Master index exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\MASTER_INDEX.md" }
       ]
@@ -29,8 +31,12 @@
       "items": [
         { "id": "master_request", "label": "Master request compilation exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\02-roadmap\\MASTER_REQUEST_COMPILATION.md" },
         { "id": "parallel_roadmap", "label": "Parallel execution roadmap exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\02-roadmap\\PARALLEL_EXECUTION_ROADMAP.md" },
+        { "id": "full_phase_roadmap", "label": "Full phase roadmap exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\02-roadmap\\FULL_PHASE_ROADMAP.md" },
         { "id": "master_checklist", "label": "Master build checklist exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\MASTER_BUILD_CHECKLIST.md" },
-        { "id": "reflection_loop", "label": "Reflection loop exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\REFLECTION_LOOP.md" }
+        { "id": "enterprise_benchmark_matrix", "label": "Enterprise benchmark matrix exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\ENTERPRISE_BENCHMARK_MATRIX.md" },
+        { "id": "reflection_loop", "label": "Reflection loop exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\REFLECTION_LOOP.md" },
+        { "id": "master_invocation_prompt", "label": "Master invocation prompt exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\07-prompts\\MASTER_INVOCATION_PROMPT.md" },
+        { "id": "master_revealer_prompt", "label": "Master revealer prompt exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\07-prompts\\MASTER_REVEALER_PROMPT.md" }
       ]
     }
   ]

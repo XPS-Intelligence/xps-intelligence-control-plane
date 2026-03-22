@@ -25,11 +25,17 @@ $requiredDocs = @(
   "docs\01-architecture\REPOSITORY_MAP.md",
   "docs\01-architecture\SYSTEM_MAP.md",
   "docs\01-architecture\FOUNDATION_BLUEPRINT.md",
+  "docs\01-architecture\ENTERPRISE_AUTONOMY_BLUEPRINT.md",
+  "docs\01-architecture\FULL_STACK_SPEC.md",
   "docs\02-roadmap\MASTER_REQUEST_COMPILATION.md",
   "docs\02-roadmap\PARALLEL_EXECUTION_ROADMAP.md",
+  "docs\02-roadmap\FULL_PHASE_ROADMAP.md",
   "docs\03-checklists\MASTER_BUILD_CHECKLIST.md",
+  "docs\03-checklists\ENTERPRISE_BENCHMARK_MATRIX.md",
   "docs\03-checklists\REFLECTION_LOOP.md",
-  "docs\07-prompts\PLATFORM_MEMORY.md"
+  "docs\07-prompts\PLATFORM_MEMORY.md",
+  "docs\07-prompts\MASTER_INVOCATION_PROMPT.md",
+  "docs\07-prompts\MASTER_REVEALER_PROMPT.md"
 )
 
 foreach ($relativePath in $requiredDocs) {

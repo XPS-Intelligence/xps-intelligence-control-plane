@@ -12,15 +12,21 @@ This is the top-level linked index for the XPS Intelligence ecosystem.
 
 ## Core authority
 - [XPS Master Blueprint](C:\XPS\xps-intelligence-control-plane\docs\01-architecture\XPS_MASTER_BLUEPRINT.md)
+- [Enterprise Autonomy Blueprint](C:\XPS\xps-intelligence-control-plane\docs\01-architecture\ENTERPRISE_AUTONOMY_BLUEPRINT.md)
+- [Full Stack Specification](C:\XPS\xps-intelligence-control-plane\docs\01-architecture\FULL_STACK_SPEC.md)
 - [System Contract](C:\XPS\xps-intelligence-control-plane\docs\01-architecture\SYSTEM_CONTRACT.md)
 - [Repository Map](C:\XPS\xps-intelligence-control-plane\docs\01-architecture\REPOSITORY_MAP.md)
 - [Platform Memory](C:\XPS\xps-intelligence-control-plane\docs\07-prompts\PLATFORM_MEMORY.md)
 
 ## Build control
 - [Master Request Compilation](C:\XPS\xps-intelligence-control-plane\docs\02-roadmap\MASTER_REQUEST_COMPILATION.md)
+- [Full Phase Roadmap](C:\XPS\xps-intelligence-control-plane\docs\02-roadmap\FULL_PHASE_ROADMAP.md)
 - [Master Build Checklist](C:\XPS\xps-intelligence-control-plane\docs\03-checklists\MASTER_BUILD_CHECKLIST.md)
+- [Enterprise Benchmark Matrix](C:\XPS\xps-intelligence-control-plane\docs\03-checklists\ENTERPRISE_BENCHMARK_MATRIX.md)
 - [Reflection Loop](C:\XPS\xps-intelligence-control-plane\docs\03-checklists\REFLECTION_LOOP.md)
 - [Workspace Rehydrate Script](C:\XPS\xps-intelligence-control-plane\bootstrap\rehydrate-workspace.ps1)
+- [Master Invocation Prompt](C:\XPS\xps-intelligence-control-plane\docs\07-prompts\MASTER_INVOCATION_PROMPT.md)
+- [Master Revealer Prompt](C:\XPS\xps-intelligence-control-plane\docs\07-prompts\MASTER_REVEALER_PROMPT.md)
 
 ## Intelligence
 - [xps-intel Architecture](C:\XPS\xps-intel\docs\ARCHITECTURE.md)

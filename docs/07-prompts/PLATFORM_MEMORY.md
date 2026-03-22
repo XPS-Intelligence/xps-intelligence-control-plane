@@ -63,3 +63,19 @@ The internal platform must support:
 4. role workspaces and assistant framework
 5. admin control plane and editor
 6. CI/CD, postdeploy smoke, and self-healing operations
+
+## Invocation anchors
+- primary invocation source: `docs/07-prompts/MASTER_INVOCATION_PROMPT.md`
+- primary revealer source: `docs/07-prompts/MASTER_REVEALER_PROMPT.md`
+- architecture authority: `docs/01-architecture/ENTERPRISE_AUTONOMY_BLUEPRINT.md`
+- full stack authority: `docs/01-architecture/FULL_STACK_SPEC.md`
+- phase authority: `docs/02-roadmap/FULL_PHASE_ROADMAP.md`
+- benchmark authority: `docs/03-checklists/ENTERPRISE_BENCHMARK_MATRIX.md`
+
+## Immediate runtime focus
+- Railway-first auth
+- role pages
+- admin/editor donor integration
+- `xps-intel` retrieval wiring
+- `xps-distallation-system` runtime wiring
+- benchmark and e2e validation for lead ingestion and intelligence paths
