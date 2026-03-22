@@ -1,0 +1,16 @@
+﻿{
+  ""template_name"": ""xps-intelligence-system-template"",
+  ""purpose"": ""Runtime monorepo for the XPS Intelligence System"",
+  ""required_dirs"": [
+    ""apps/web"",
+    ""apps/api"",
+    ""apps/worker"",
+    ""packages/shared"",
+    ""packages/db"",
+    ""packages/adapters"",
+    ""packages/prompts"",
+    ""packages/agents"",
+    ""infra/github"",
+    ""infra/railway""
+  ]
+}

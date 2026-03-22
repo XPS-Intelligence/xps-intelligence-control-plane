@@ -1,0 +1,19 @@
+﻿name: Bootstrap Control Plane
+description: Bootstrap or advance the control plane
+title: ""BOOTSTRAP: ""
+labels:
+  - phase:0-bootstrap
+  - type:docs
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
