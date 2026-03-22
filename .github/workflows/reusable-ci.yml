@@ -1,4 +1,4 @@
-﻿name: reusable-ci
+name: reusable-ci
 
 on:
   workflow_call:
@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate markdown/json/yaml presence
+      - name: Validate JSON manifests
         run: |
-          echo 'Reusable CI placeholder ready'
+          node -e "JSON.parse(require('fs').readFileSync('templates/runtime-repo/template.manifest.json','utf8')); JSON.parse(require('fs').readFileSync('docs/03-checklists/INTERACTIVE_FOUNDATION_CHECKLIST.json','utf8')); console.log('json-ok')"
+      - name: Validate foundation docs and memory
+        shell: pwsh
+        run: |
+          ./bootstrap/validate-foundation.ps1

@@ -1,0 +1,37 @@
+{
+  "name": "xps-foundation-checklist",
+  "version": 1,
+  "description": "Interactive checklist for validating pre-development foundation systems.",
+  "sections": [
+    {
+      "id": "memory",
+      "title": "Memory and Rehydration",
+      "items": [
+        { "id": "workspace_memory", "label": "Workspace memory exists", "path": "C:\\XPS\\AGENTS.md" },
+        { "id": "platform_memory", "label": "Platform memory exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\07-prompts\\PLATFORM_MEMORY.md" },
+        { "id": "runtime_memory", "label": "Runtime memory exists", "path": "C:\\XPS\\xps-intelligence-system\\docs\\SYSTEM_MEMORY.md" },
+        { "id": "rehydrate_script", "label": "Rehydrate script exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\bootstrap\\rehydrate-workspace.ps1" }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture and Mapping",
+      "items": [
+        { "id": "master_blueprint", "label": "Master blueprint exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\XPS_MASTER_BLUEPRINT.md" },
+        { "id": "foundation_blueprint", "label": "Foundation blueprint exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\FOUNDATION_BLUEPRINT.md" },
+        { "id": "system_map", "label": "System map exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\SYSTEM_MAP.md" },
+        { "id": "master_index", "label": "Master index exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\01-architecture\\MASTER_INDEX.md" }
+      ]
+    },
+    {
+      "id": "execution",
+      "title": "Execution Controls",
+      "items": [
+        { "id": "master_request", "label": "Master request compilation exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\02-roadmap\\MASTER_REQUEST_COMPILATION.md" },
+        { "id": "parallel_roadmap", "label": "Parallel execution roadmap exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\02-roadmap\\PARALLEL_EXECUTION_ROADMAP.md" },
+        { "id": "master_checklist", "label": "Master build checklist exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\MASTER_BUILD_CHECKLIST.md" },
+        { "id": "reflection_loop", "label": "Reflection loop exists", "path": "C:\\XPS\\xps-intelligence-control-plane\\docs\\03-checklists\\REFLECTION_LOOP.md" }
+      ]
+    }
+  ]
+}

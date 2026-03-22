@@ -1,0 +1,10 @@
+name: foundation-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  foundation:
+    uses: ./.github/workflows/reusable-ci.yml
