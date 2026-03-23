@@ -14,6 +14,7 @@ It captures the platform truth that should survive across chats, sessions, and c
 - `xps-google-workspace-bridge` = workspace integration layer
 - `xps-analytics-bi` = KPI, forecasting, simulation, benchmarking
 - `xps-employee-copilots` = role assistants, skills, prompts, persona packs
+- `agent system` = bounded parallel lanes, validation, reflection, failover, and documentation discipline
 
 ## Donor systems
 - `xps-intelligence-system-v.5` = strongest donor for current portal runtime and appearance
@@ -63,10 +64,18 @@ The internal platform must support:
 4. role workspaces and assistant framework
 5. admin control plane and editor
 6. CI/CD, postdeploy smoke, and self-healing operations
+7. bounded parallel agent system, prompt library, and failover runbooks
 
 ## Invocation anchors
 - primary invocation source: `docs/07-prompts/MASTER_INVOCATION_PROMPT.md`
 - primary revealer source: `docs/07-prompts/MASTER_REVEALER_PROMPT.md`
+- overnight continuity source: `docs/07-prompts/OVERNIGHT_CONTINUITY_PROMPT.md`
+- agent system entry: `docs/01-architecture/AGENT_SYSTEM_README.md`
+- overnight continuity package: `docs/01-architecture/OVERNIGHT_CONTINUITY_PACKAGE.md`
+- agent prompt library: `docs/07-prompts/AGENT_PROMPT_LIBRARY.md`
+- validation gate: `docs/03-checklists/AGENT_VALIDATION_GATE.md`
+- failover runbook: `docs/04-issues/AGENT_OPERATION_RUNBOOK.md`
+- overnight continuity runbook: `docs/04-issues/OVERNIGHT_CONTINUITY_RUNBOOK.md`
 - architecture authority: `docs/01-architecture/ENTERPRISE_AUTONOMY_BLUEPRINT.md`
 - full stack authority: `docs/01-architecture/FULL_STACK_SPEC.md`
 - phase authority: `docs/02-roadmap/FULL_PHASE_ROADMAP.md`
@@ -79,3 +88,5 @@ The internal platform must support:
 - `xps-intel` retrieval wiring
 - `xps-distallation-system` runtime wiring
 - benchmark and e2e validation for lead ingestion and intelligence paths
+- agent validation gate, reflection loop, and backup-failover lane
+- overnight continuity package for bounded unattended execution and morning handoff
